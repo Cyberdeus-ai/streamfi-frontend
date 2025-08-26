@@ -8,6 +8,7 @@ import Logo from "../common/Logo";
 import Toggle from "../common/Toggle";
 import Profile from "../common/Profile";
 import Button from "../common/Button";
+import { signOut } from "@/actions/auth";
 
 type SidebarProps = {
     collapsed: boolean;
@@ -18,7 +19,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
     const router = useRouter();
 
     const onSignOutClicked = () => {
-        
+        signOut();            
     }
     
     return (
