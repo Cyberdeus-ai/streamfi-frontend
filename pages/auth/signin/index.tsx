@@ -1,12 +1,44 @@
 import React from "react";
+import toast from "react-hot-toast";
 import TopNav from "@/components/layout/TopNav";
 import Button from "@/components/common/Button";
 import Mark from "@/components/common/Mark";
+import { signIn } from "@/actions/auth";
 
-export default function SignUp() {
-    
-    const onSignInClicked = () => {
+export default function SignIn() {
 
+    const onSignInClicked = async () => {
+        if (typeof window !== "undefined" && window.ethereum) {
+            try {
+                const accounts = await window.ethereum.request({
+                    method: "eth_requestAccounts",
+                }) as string[];
+
+                if (accounts.length === 0) {
+                    toast("No accounts found", {
+                        className: "error-toast"
+                    });
+                    return;
+                }
+
+                const res = await signIn(accounts[0]);
+                if(res.data.result) {
+                    toast("Successfully signed in!", {
+                        className: "success-toast"
+                    });
+                }
+            } catch (err) {
+                toast("Failed to sign in with Ethereum.", {
+                    className: "error-toast"
+                });
+            }
+        } else {
+            toast("Ethereum provider is not available.", 
+                {
+                    className: "error-toast"
+                }
+            );
+        }
     }
     
     return (
@@ -26,7 +58,7 @@ export default function SignUp() {
                             <p className="text-sm">This won&apos;t cost you any gas.</p>
                         </div>
 
-                        <Button title="Sign In" onClick={onSignInClicked} />
+                        <Button title="Sign In" onClick={onSignInClicked} variant="secondary" />
                     </div>
                 </div>
             </div>
