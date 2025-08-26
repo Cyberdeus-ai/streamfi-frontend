@@ -15,29 +15,19 @@ export default function SignIn() {
                 }) as string[];
 
                 if (accounts.length === 0) {
-                    toast("No accounts found", {
-                        className: "error-toast"
-                    });
+                    toast.error("No accounts found");
                     return;
                 }
 
                 const res = await signIn(accounts[0]);
                 if(res.data.result) {
-                    toast("Successfully signed in!", {
-                        className: "success-toast"
-                    });
+                    toast.success("Successfully signed in!");
                 }
             } catch (err) {
-                toast("Failed to sign in with Ethereum.", {
-                    className: "error-toast"
-                });
+                toast.error("Failed to sign in with Ethereum.");
             }
         } else {
-            toast("Ethereum provider is not available.", 
-                {
-                    className: "error-toast"
-                }
-            );
+            toast.error("Ethereum provider is not available.");
         }
     }
     

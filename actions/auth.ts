@@ -14,9 +14,7 @@ export const signUp = async (userInfo: signUpProps) => {
         const res = await api.post("/auth/signup", userInfo);
         return res.data.result;
     } catch (err) {
-       toast(`Error: ${err}`, {
-            className: "error-toast"
-       });
+       toast.error(`Error: ${err}`);
     }
 }
 
@@ -25,9 +23,7 @@ export const signIn = async (address: string) => {
         const res = await api.post("/auth/signin", { address: address });
         return res.data.result;
     } catch (err) {
-        toast(`Error: ${err}`, {
-            className: "error-toast"
-        });
+        toast.error(`Error: ${err}`);
     }
 }
 
@@ -37,8 +33,6 @@ export const signOut = async () => {
         logout();
         setAuthToken(null);
     } catch (err) {
-        toast(`Error: ${err}`, {
-            className: "error-toast"
-        });
+        toast.error(`Error: ${err}`);
     }
 }
