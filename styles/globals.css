@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.logo-bg {
+  height: 40px;
+  padding-left: 30px;
+  padding-top: 5px;
+  background-image: url("/logo_white.png");
+  background-position: top left;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
