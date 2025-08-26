@@ -9,6 +9,7 @@ import Toggle from "../common/Toggle";
 import Profile from "../common/Profile";
 import Button from "../common/Button";
 import { signOut } from "@/actions/auth";
+import { useAuth } from "@/context";
 
 type SidebarProps = {
     collapsed: boolean;
@@ -17,7 +18,16 @@ type SidebarProps = {
 
 const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
     const router = useRouter();
+    const { isAuthenticated } = useAuth();
 
+    const onSignInClicked = () => {
+        router.push("/auth/sign-in"); 
+    }
+
+    const onSignUpClicked = () => {
+        router.push("/auth/sign-up"); 
+    }
+    
     const onSignOutClicked = () => {
         signOut();            
     }
@@ -74,22 +84,38 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                     </li>
                 </ul>
 
-                {!collapsed &&
-                    (
-                        <div className="flex flex-col justify-center items-center min-h-screen mt-6 pt-6 border-t text-white border-gray-800">
-                            <Profile
-                                avatarUrl=""
-                                username="CyberDeus" 
-                                tokenBalance={0}
-                                campaignCount={0}
-                            />
-                            <Button
-                                className="mt-5"
-                                title="Sign Out"
-                                onClick={onSignOutClicked}
-                            />
-                        </div>
-                    )
+                {!collapsed && 
+                    isAuthenticated ? (
+                            <div className="flex flex-col justify-center items-center min-h-screen mt-6 pt-6 border-t text-white border-gray-800">
+                                <Profile
+                                    avatarUrl=""
+                                    username="CyberDeus" 
+                                    tokenBalance={0}
+                                    campaignCount={0}
+                                />
+                                <Button
+                                    className="mt-5"
+                                    title="Sign Out"
+                                    onClick={onSignOutClicked}
+                                    variant="secondary"
+                                />
+                            </div>
+                        ) : (
+                            <div className="flex flex-col justify-center items-center min-h-screen mt-6 pt-6 border-t text-white border-gray-800">
+                                <Button
+                                    className="mt-5"
+                                    title="Sign In"
+                                    onClick={onSignInClicked}
+                                    variant="primary"
+                                />
+                                <Button
+                                    className="mt-5"
+                                    title="Sign Up"
+                                    onClick={onSignUpClicked}
+                                    variant="secondary"
+                                />
+                            </div>    
+                        )
                 }
             </nav>
         </div>

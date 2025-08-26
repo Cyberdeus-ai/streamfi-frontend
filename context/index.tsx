@@ -6,12 +6,14 @@ import toast from "react-hot-toast";
 
 interface AuthContextType {
     user: object | null;
+    isAuthenticated: boolean;
     login: (user: object) => void;
     logout: () => void;
 }
 
 const AuthContext = createContext<AuthContextType>({
     user: { id: "", name: "", email: "" },
+    isAuthenticated: false,
     login: () => { },
     logout: () => { },
 });
@@ -22,6 +24,7 @@ export function useAuth() {
 
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<object | null>(null);
+    const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
     const login = (user: object) => setUser(user);
     const logout = () => setUser(null);
@@ -43,7 +46,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, login, logout }}>
+        <AuthContext.Provider value={{ user, isAuthenticated, login, logout }}>
             {children}
         </AuthContext.Provider>
     );
