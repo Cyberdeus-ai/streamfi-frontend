@@ -21,11 +21,11 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
     const { isAuthenticated } = useAuth();
 
     const onSignInClicked = () => {
-        router.push("/auth/sign-in"); 
+        router.push("/auth/signin"); 
     }
 
     const onSignUpClicked = () => {
-        router.push("/auth/sign-up"); 
+        router.push("/auth/signup"); 
     }
     
     const onSignOutClicked = () => {
