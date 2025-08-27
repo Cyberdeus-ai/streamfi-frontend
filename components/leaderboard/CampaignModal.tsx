@@ -1,34 +1,41 @@
 import React, { useState } from "react";
 import Modal from "../common/Modal";
 import Input from "../common/Input";
+import TagInput from "../common/TagInput";
 import moment from 'moment';
 import { createCampaign } from "@/actions/campaign";
 
 type CampaignModalProps = {
     isOpen: boolean;
     onClose: () => void;
-    list: Campaign[];
     setList: React.Dispatch<React.SetStateAction<Campaign[]>>;
 }
 
 type Campaign = {
     startDate?: Date;
     endDate?: Date;
-    hashtags?: string;
-    tickers?: string;
-    handles?: string;
-    rewardPool?: string;
-    bigAccounts?: string;
+    hashtags?: string[];
+    tickers?: string[];
+    handles?: string[];
+    rewardPool?: number;
+    bigAccounts?: string[];
 }
 
-const CampaignModal = ({ isOpen, onClose, list, setList }: CampaignModalProps) => {
+const CampaignModal = ({ isOpen, onClose, setList }: CampaignModalProps) => {
     const [campaign, setCampaign] = useState<Campaign | null>(null)
 
-    const onCampaignChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const onInputChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setCampaign({
             ...campaign,
             [name]: value
+        })
+    }
+
+    const onTagInputChanged = (name:string, values: string[]) => {
+        setCampaign({
+            ...campaign,
+            [name]: values
         })
     }
 
@@ -62,7 +69,7 @@ const CampaignModal = ({ isOpen, onClose, list, setList }: CampaignModalProps) =
                         type="date"
                         placeholder="XXXX-XX-XX" 
                         value={moment(campaign?.startDate??null).format('YYYY-MM-DD')}
-                        onChange={onCampaignChanged}
+                        onChange={onInputChanged}
                     />
                     <Input
                         label="End date"
@@ -70,57 +77,53 @@ const CampaignModal = ({ isOpen, onClose, list, setList }: CampaignModalProps) =
                         type="date"
                         placeholder="XXXX-XX-XX" 
                         value={moment(campaign?.endDate??null).format('YYYY-MM-DD')}
-                        onChange={onCampaignChanged}
+                        onChange={onInputChanged}
                     />  
                 </div>
                 <div className="w-full">
-                    <Input
+                    <TagInput
                         label="Hashtags"
                         name="hashtags"
-                        type="text"
-                        placeholder="####" 
-                        value={campaign?.hashtags??""}
-                        onChange={onCampaignChanged}
+                        value={campaign?.hashtags || []}
+                        onChange={onTagInputChanged}
+                        placeholder="#BTC #LTC"
                     />
                 </div>
                 <div className="w-full">
-                    <Input
-                        label="Tickers"
+                    <TagInput
+                        label="tickers"
                         name="tickers"
-                        type="text"
-                        placeholder="****" 
-                        value={campaign?.tickers??""}
-                        onChange={onCampaignChanged}
+                        value={campaign?.tickers || []}
+                        onChange={onTagInputChanged}
+                        placeholder="$APPL $BPRL"
                     />
                 </div>
                 <div className="w-full">
-                    <Input
-                        label="Handles"
+                    <TagInput
+                        label="handles"
                         name="handles"
-                        type="text"
-                        placeholder="yourname@twitter.com" 
-                        value={campaign?.handles??""}
-                        onChange={onCampaignChanged}
+                        value={campaign?.handles || []}
+                        onChange={onTagInputChanged}
+                        placeholder="@jacky @micky"
                     />
                 </div>
                 <div className="w-full">
                     <Input
                         label="Reward pool"
                         name="rewardPool"
-                        type="text"
+                        type="number"
                         placeholder="23.12" 
-                        value={campaign?.rewardPool??""}
-                        onChange={onCampaignChanged}
+                        value={campaign?.rewardPool?.toString()??""}
+                        onChange={onInputChanged}
                     />
                 </div>
                 <div className="w-full">
-                    <Input
-                        label="Big accounts"
+                    <TagInput
+                        label="tickers"
                         name="bigAccounts"
-                        type="text"
-                        placeholder="abcdef@twitter.com" 
-                        value={campaign?.bigAccounts??""}
-                        onChange={onCampaignChanged}
+                        value={campaign?.handles || []}
+                        onChange={onTagInputChanged}
+                        placeholder="big.account1@twitter.com big.account2@twitter.com"
                     />
                 </div>
             </div>

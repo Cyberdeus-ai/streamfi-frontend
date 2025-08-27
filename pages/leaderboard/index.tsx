@@ -10,11 +10,11 @@ import { getCampaignList } from '@/actions/campaign';
 type Campaign = {
     startDate?: Date;
     endDate?: Date;
-    hashtags?: string;
-    tickers?: string;
-    handles?: string;
-    rewardPool?: string;
-    bigAccounts?: string;
+    hashtags?: string[];
+    tickers?: string[];
+    handles?: string[];
+    rewardPool?: number;
+    bigAccounts?: string[];
 }
 
 export default function Leaderboard() {
@@ -71,7 +71,7 @@ export default function Leaderboard() {
                             {
                                 campaignList.map((c, index) => {
                                     return (
-                                        <CampaignItem key={index} title={c.handles??`Twitter Campaign_${index+1}`} url={`/twitter${index%3+1}.png`}/>
+                                        <CampaignItem key={index} title={c.tickers?.join(', ')??`Twitter Campaign_${index+1}`} url={`/twitter${index%3+1}.png`}/>
                                     )
                                 })
                             }   
@@ -80,7 +80,6 @@ export default function Leaderboard() {
                 </div>
             </div>
             <CampaignModal
-                list={campaignList}
                 setList={setCampaignList}
                 isOpen={isModalOpen}
                 onClose={onCloseModal}

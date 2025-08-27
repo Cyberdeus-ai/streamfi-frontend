@@ -1,5 +1,4 @@
 import React from "react";
-import clsx from "clsx";
 
 type InputProps = {
     label?: string;
@@ -21,10 +20,10 @@ const Input = ({
     disabled = false,
 }: InputProps) => {
     return (
-        <div className="mb-6">
+        <div className="mt-2">
             {
                 (label || label !== "") && (
-                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
+                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
                         { label }
                     </label>
                 )
