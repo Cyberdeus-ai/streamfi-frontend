@@ -38,7 +38,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                 {!collapsed && <Logo />}
                 <Toggle onToggle={onToggle} />
             </div>
-            <nav className="flex-1 p-4">
+            <div className="flex-1 p-4">
                 <ul className="space-y-2">
                     <li>
                         <Link
@@ -51,7 +51,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                             href="/leaderboard"
                         >
                             <AiFillDashboard className={clsx("text-xl", !collapsed && "mr-2")} />
-                            {!collapsed && <span>LeaderBoard</span>}
+                            {!collapsed && <span>Leaderboard</span>}
                         </Link>
                     </li>
                     <li>
@@ -83,41 +83,42 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                         </Link>
                     </li>
                 </ul>
-
+            </div>
+            <div className="relative flex flex-col w-full min-w-0 p-2 px-10 mt-auto">
                 {!collapsed && 
                     isAuthenticated ? (
-                            <div className="flex flex-col justify-center items-center min-h-screen mt-6 pt-6 border-t text-white border-gray-800">
-                                <Profile
-                                    avatarUrl="/avatar.jpg"
-                                    username="CyberDeus" 
-                                    tokenBalance={0}
-                                    campaignCount={0}
-                                />
-                                <Button
-                                    className="mt-5"
-                                    title="Sign Out"
-                                    onClick={onSignOutClicked}
-                                    variant="secondary"
-                                />
-                            </div>
-                        ) : (
-                            <div className="flex flex-col justify-center items-center min-h-screen mt-6 pt-6 border-t text-white border-gray-800">
-                                <Button
-                                    className="mt-5"
-                                    title="Sign In"
-                                    onClick={onSignInClicked}
-                                    variant="primary"
-                                />
-                                <Button
-                                    className="mt-5"
-                                    title="Sign Up"
-                                    onClick={onSignUpClicked}
-                                    variant="secondary"
-                                />
-                            </div>    
-                        )
+                        <div className="flex flex-col mt-10 pt-10 text-white">
+                            <Profile
+                                avatarUrl="/avatar.jpg"
+                                username="CyberDeus" 
+                                tokenBalance={0}
+                                campaignCount={0}
+                            />
+                            <Button
+                                className="mt-5"
+                                title="Sign Out"
+                                onClick={onSignOutClicked}
+                                variant="secondary"
+                            />
+                        </div>
+                    ) : (
+                        <div className="flex flex-col mt-10 pt-10 text-white">
+                            <Button
+                                className="mt-5"
+                                title="Sign In"
+                                onClick={onSignInClicked}
+                                variant="primary"
+                            />
+                            <Button
+                                className="mt-5"
+                                title="Sign Up"
+                                onClick={onSignUpClicked}
+                                variant="secondary"
+                            />
+                        </div>    
+                    )
                 }
-            </nav>
+            </div>
         </div>
     )
 }
