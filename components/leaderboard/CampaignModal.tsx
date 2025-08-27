@@ -7,6 +7,8 @@ import { createCampaign } from "@/actions/campaign";
 type CampaignModalProps = {
     isOpen: boolean;
     onClose: () => void;
+    list: Campaign[];
+    setList: React.Dispatch<React.SetStateAction<Campaign[]>>;
 }
 
 type Campaign = {
@@ -19,7 +21,7 @@ type Campaign = {
     bigAccounts?: string;
 }
 
-const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
+const CampaignModal = ({ isOpen, onClose, list, setList }: CampaignModalProps) => {
     const [campaign, setCampaign] = useState<Campaign | null>(null)
 
     const onCampaignChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -31,9 +33,12 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
     }
 
     const onOkBtnClicked = async () => {
-        const data = await createCampaign(campaign);
-        console.log(data);
-        onClose();
+        if (campaign) {
+            const data = await createCampaign(campaign);
+            setList(prevList => [...prevList, data]);
+            setCampaign(null);
+            onClose();
+        }
     }
 
     const onCancelBtnClicked = () => {
@@ -56,7 +61,7 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
                         name="startDate"
                         type="date"
                         placeholder="XXXX-XX-XX" 
-                        value={moment(campaign?.startDate??new Date()).format('YYYY-MM-DD')}
+                        value={moment(campaign?.startDate??null).format('YYYY-MM-DD')}
                         onChange={onCampaignChanged}
                     />
                     <Input
@@ -64,7 +69,7 @@ const CampaignModal = ({ isOpen, onClose }: CampaignModalProps) => {
                         name="endDate"
                         type="date"
                         placeholder="XXXX-XX-XX" 
-                        value={moment(campaign?.endDate??new Date()).format('YYYY-MM-DD')}
+                        value={moment(campaign?.endDate??null).format('YYYY-MM-DD')}
                         onChange={onCampaignChanged}
                     />  
                 </div>
