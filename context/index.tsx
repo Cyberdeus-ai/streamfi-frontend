@@ -1,8 +1,10 @@
 "use client";
 
 import { ReactNode, createContext, useContext, useState, useEffect } from "react";
-import { jwtDecode } from "jwt-decode";
 import toast from "react-hot-toast";
+import { signInWithToken } from "@/actions/auth";
+import { setAuthToken } from "@/utils/setAuthToken";
+import { useRouter } from "next/navigation";
 
 interface AuthContextType {
     user: object | null;
@@ -12,10 +14,10 @@ interface AuthContextType {
 }
 
 const AuthContext = createContext<AuthContextType>({
-    user: { id: "", name: "", email: "" },
+    user: null,
     isAuthenticated: false,
-    login: () => { },
-    logout: () => { },
+    login: () => {},
+    logout: () => {},
 });
 
 export function useAuth() {
@@ -26,16 +28,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<object | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 
-    const login = (user: object) => setUser(user);
-    const logout = () => setUser(null);
+    const router = useRouter();
+
+    const login = (user: object) => {
+        setUser(user);
+        setIsAuthenticated(true);
+    }
+    const logout = () => {
+        setUser(null);
+        setIsAuthenticated(false);
+    }
 
     useEffect(() => {
         const fetch = async () => {
             try {
                 if(localStorage.getItem("accessToken")) {
-                    const token = localStorage.getItem("accessToken") || "";
-                    const userInfo = jwtDecode(token);
-                    setUser(userInfo);
+                    const data = await signInWithToken();
+                    login(data.user);
+                    setAuthToken(data.token);
+                    router.push("/leaderboard");
                 }
                 return;
             } catch (err) {

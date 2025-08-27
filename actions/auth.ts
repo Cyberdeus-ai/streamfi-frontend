@@ -21,10 +21,19 @@ export const signUp = async (userInfo: signUpProps) => {
 export const signIn = async (address: string) => {
     try {
         const res = await api.post("/auth/signin", { address: address });
-        return res.data.result;
+        return res.data;
     } catch (err) {
         toast.error(`Error: ${err}`);
     }
+}
+
+export const signInWithToken = async () => {
+    try {
+        const res = await api.get("/auth/signin-with-token");
+        return res.data;
+    } catch (err) {
+        toast.error(`Error: ${err}`);
+    }        
 }
 
 export const signOut = async () => {

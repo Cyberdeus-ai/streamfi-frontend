@@ -88,7 +88,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                     isAuthenticated ? (
                             <div className="flex flex-col justify-center items-center min-h-screen mt-6 pt-6 border-t text-white border-gray-800">
                                 <Profile
-                                    avatarUrl=""
+                                    avatarUrl="/avatar.jpg"
                                     username="CyberDeus" 
                                     tokenBalance={0}
                                     campaignCount={0}

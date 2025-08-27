@@ -1,11 +1,17 @@
-import React from "react";
+import React, { use } from "react";
 import toast from "react-hot-toast";
+import { useRouter } from "next/router";
 import TopNav from "@/components/layout/TopNav";
 import Button from "@/components/common/Button";
 import Mark from "@/components/common/Mark";
 import { signIn } from "@/actions/auth";
+import { useAuth } from "@/context";
+import { setAuthToken } from "@/utils/setAuthToken";
 
 export default function SignIn() {
+
+    const router = useRouter();
+    const { login } = useAuth();
 
     const onSignInClicked = async () => {
         if (typeof window !== "undefined" && window.ethereum) {
@@ -19,9 +25,12 @@ export default function SignIn() {
                     return;
                 }
 
-                const res = await signIn(accounts[0]);
-                if(res.data.result) {
+                const data = await signIn(accounts[0]);
+                if(data.result) {
                     toast.success("Successfully signed in!");
+                    login(data.user);
+                    setAuthToken(data.token);
+                    router.push("/leaderboard");
                 }
             } catch (err) {
                 toast.error("Failed to sign in with Ethereum.");
