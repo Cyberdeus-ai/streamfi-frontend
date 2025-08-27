@@ -9,7 +9,6 @@ type InputProps = {
     placeholder?: string;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     disabled?: boolean;
-    variant?: string;
 }
 
 const Input = ({ 
@@ -20,13 +19,12 @@ const Input = ({
     value = "",
     onChange,
     disabled = false,
-    variant = "block"
 }: InputProps) => {
     return (
         <div className="mb-6">
             {
                 (label || label !== "") && (
-                    <label htmlFor="address" className={clsx(variant, "text-sm font-medium text-gray-700 mb-2")}>
+                    <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-2">
                         { label }
                     </label>
                 )
