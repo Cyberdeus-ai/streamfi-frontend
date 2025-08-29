@@ -8,7 +8,6 @@ import Logo from "../common/Logo";
 import Toggle from "../common/Toggle";
 import Profile from "../common/Profile";
 import Button from "../common/Button";
-import { signOut } from "@/actions/auth";
 import { useAuth } from "@/context";
 
 type SidebarProps = {
@@ -18,19 +17,7 @@ type SidebarProps = {
 
 const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
     const router = useRouter();
-    const { isAuthenticated } = useAuth();
-
-    const onSignInClicked = () => {
-        router.push("/auth/signin"); 
-    }
-
-    const onSignUpClicked = () => {
-        router.push("/auth/signup"); 
-    }
-    
-    const onSignOutClicked = () => {
-        signOut();            
-    }
+    const { isAuthenticated, logout } = useAuth();
     
     return (
         <div className={`${collapsed ? 'w-16' : 'w-64'} bg-gray-900 h-screen flex flex-col transition-all duration-300`}>
@@ -97,7 +84,7 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                             <Button
                                 className="mt-5"
                                 title="Sign Out"
-                                onClick={onSignOutClicked}
+                                onClick={() => logout()}
                                 variant="secondary"
                             />
                         </div>
@@ -106,13 +93,13 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
                             <Button
                                 className="mt-5"
                                 title="Sign In"
-                                onClick={onSignInClicked}
+                                onClick={() => router.push("/auth/signin")}
                                 variant="primary"
                             />
                             <Button
                                 className="mt-5"
                                 title="Sign Up"
-                                onClick={onSignUpClicked}
+                                onClick={() => router.push("/auth/signup")}
                                 variant="secondary"
                             />
                         </div>    

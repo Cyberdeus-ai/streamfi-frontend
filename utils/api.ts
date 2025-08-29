@@ -1,6 +1,5 @@
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { signOut } from '@/actions/auth';
 
 let accessToken = "";
 
@@ -33,7 +32,6 @@ api.interceptors.response.use(
                     break;
                 case 401:
                     toast.error("Unauthorized - maybe token expired");
-                    signOut();
                     window.location.href = "/auth/signin";
                     break;
                 case 403:
@@ -41,6 +39,9 @@ api.interceptors.response.use(
                     break;
                 case 404:
                     toast.error(`Not Found: ${error.response.config.url}`);
+                    break;
+                case 409:
+                    toast.error(`Conflict: ${error.response.data}`);
                     break;
                 case 500:
                     toast.error("Internal Server Error");

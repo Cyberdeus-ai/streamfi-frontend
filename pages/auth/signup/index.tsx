@@ -28,7 +28,10 @@ export default function SignUp() {
     }, [account]);
 
     const handleNextStep = async () => {
-        if(step === 0) await signInWithEthereum();
+        if(step === 0) {
+            const success = await signInWithEthereum();
+            if(!success) return;
+        }
         if(step === 2) {
             const success = await signUp(userInfo);
             if(!success) return;
@@ -69,22 +72,14 @@ export default function SignUp() {
                             <p className="text-sm">Sign this message to prove you own this wallet</p>
                             <p className="text-sm">and to sign to the application.</p>
                             <p className="text-sm">This won&apos;t cost you any gas.</p>
+                            {error && <p className="mt-4 font-bold text-red-700">{error}</p>}
                         </div>
-                        <Input
-                            label="Wallet Address"
-                            name="address"
-                            placeholder="0x123456789abcdef" 
-                            value={userInfo.address??""}
-                            onChange={onUserInfoChange}
-                            disabled={true}
-                        />
                         <Button
-                            title={isLoading ? "Signing In..." : "Sign up with wallet"}
+                            title={isLoading ? "Signing Up..." : "Sign up with wallet"}
                             onClick={handleNextStep}
                             disabled={isLoading}
                             variant={isLoading ? "default" : "secondary"}
                         />
-                        {error && <p style={{ color: "red" }}>{error}</p>}
                     </div>
                 );
             case 1:
@@ -108,6 +103,7 @@ export default function SignUp() {
                             onChange={onUserInfoChange}
                         />
                         <Button
+                            className="mt-4"
                             title="Next"
                             onClick={handleNextStep}
                             variant="secondary"
@@ -137,6 +133,7 @@ export default function SignUp() {
                             />
                         </div>
                         <Button
+                            className="mt-4"
                             title="Next"
                             onClick={handleNextStep}
                             variant="secondary"
@@ -157,10 +154,11 @@ export default function SignUp() {
                             <div className="w-4 h-4 rounded-full bg-blue-500"></div>
                         </div>
                         <div className="text-gray-600 text-center my-10 space-y-2">
-                            <p className="text-sm">All done!</p>
+                            <p className="text-sm">Successfully</p>
                         </div>
                         <Button
-                            title="Sign In"
+                            className="mt-4"
+                            title="Done"
                             onClick={handleNextStep}
                             variant="secondary"
                         />

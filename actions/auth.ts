@@ -1,12 +1,33 @@
 import api from "../utils/api";
 import toast from "react-hot-toast";
-import { useAuth } from "@/context";
-import { setAuthToken } from "../utils/setAuthToken";
 
 type signUpProps = {
     address?: string | null;
     twitterAccount?: string;
     accountType?: string;
+}
+
+export const getNonce = async () => {
+    try {
+        const res = await api.get("/auth/nonce");
+        return res.data;
+    } catch (err) {
+        toast.error(`Error: ${err}`);
+    }
+}
+
+export const verify = async (message: any, signature: any, nonce: any, address: any) => {
+    try {
+        const res = await api.post('/auth/verify', {
+            message: message,
+            signature: signature,
+            nonce: nonce,
+            address: address
+        });
+        return res.data;
+    } catch (err) {
+        toast.error(`Error: ${err}`);
+    }
 }
 
 export const signUp = async (userInfo: signUpProps) => {
@@ -34,14 +55,4 @@ export const signInWithToken = async () => {
     } catch (err) {
         toast.error(`Error: ${err}`);
     }        
-}
-
-export const signOut = async () => {
-    try {
-        const { logout } = useAuth();
-        logout();
-        setAuthToken(null);
-    } catch (err) {
-        toast.error(`Error: ${err}`);
-    }
 }
