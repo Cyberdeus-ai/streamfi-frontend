@@ -1,4 +1,5 @@
-import React, { use } from "react";
+import React from "react";
+import { BrowserProvider } from "ethers";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import TopNav from "@/components/layout/TopNav";
@@ -25,7 +26,12 @@ export default function SignIn() {
                     return;
                 }
 
-                const data = await signIn(accounts[0]);
+                const provider = new BrowserProvider(window.ethereum);
+                const signer = await provider.getSigner();
+
+                const address = await signer.getAddress()
+
+                const data = await signIn(address);
                 if(data.result) {
                     toast.success("Successfully signed in!");
                     login(data.user);

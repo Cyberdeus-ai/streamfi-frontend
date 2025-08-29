@@ -86,25 +86,25 @@ const CampaignModal = ({ isOpen, onClose, setList }: CampaignModalProps) => {
                         name="hashtags"
                         value={campaign?.hashtags || []}
                         onChange={onTagInputChanged}
-                        placeholder="#BTC #LTC"
+                        placeholder="Enter to add more..."
                     />
                 </div>
                 <div className="w-full">
                     <TagInput
-                        label="tickers"
+                        label="Tickers"
                         name="tickers"
                         value={campaign?.tickers || []}
                         onChange={onTagInputChanged}
-                        placeholder="$APPL $BPRL"
+                        placeholder="Enter to add more..."
                     />
                 </div>
                 <div className="w-full">
                     <TagInput
-                        label="handles"
+                        label="Handles"
                         name="handles"
                         value={campaign?.handles || []}
                         onChange={onTagInputChanged}
-                        placeholder="@jacky @micky"
+                        placeholder="Enter to add more..."
                     />
                 </div>
                 <div className="w-full">
@@ -112,18 +112,18 @@ const CampaignModal = ({ isOpen, onClose, setList }: CampaignModalProps) => {
                         label="Reward pool"
                         name="rewardPool"
                         type="number"
-                        placeholder="23.12" 
+                        placeholder="Enter a number" 
                         value={campaign?.rewardPool?.toString()??""}
                         onChange={onInputChanged}
                     />
                 </div>
                 <div className="w-full">
                     <TagInput
-                        label="tickers"
+                        label="Big accounts"
                         name="bigAccounts"
-                        value={campaign?.handles || []}
+                        value={campaign?.bigAccounts || []}
                         onChange={onTagInputChanged}
-                        placeholder="big.account1@twitter.com big.account2@twitter.com"
+                        placeholder="Enter to add more..."
                     />
                 </div>
             </div>

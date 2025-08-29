@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 import { useSiwe } from "@/utils/useSiwe";
 import TopNav from "@/components/layout/TopNav";
 import Input from "@/components/common/Input";
@@ -20,6 +21,8 @@ export default function SignUp() {
         twitterAccount: "",
         accountType: "Engager"
     });
+
+    const router = useRouter();
     
     const { isLoading, account, error, signInWithEthereum } = useSiwe();
 
@@ -37,8 +40,7 @@ export default function SignUp() {
             if(!success) return;
         }
         if(step === 3) {
-            const success = await signIn(userInfo.address??"");
-            if(!success) return;
+            router.push("/auth/signin");
         }
         if(step > 3) return;    
         setStep((prev) => prev + 1);
