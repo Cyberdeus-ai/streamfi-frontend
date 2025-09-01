@@ -6,9 +6,10 @@ import Input from "@/components/common/Input";
 import Button from "@/components/common/Button";
 import Mark from "@/components/common/Mark";
 import RadioGroup from "@/components/common/RadioGroup";
-import { signUp, signIn } from "@/actions/auth";
+import { signUp, setAccountType } from "@/actions/auth";
 
 type UserInfoType = {
+    userId: string | null;
     address?: string | null;
     twitterAccount?: string;
     accountType?: string;
@@ -17,6 +18,7 @@ type UserInfoType = {
 export default function SignUp() {
     const [step, setStep] = useState<number>(0);
     const [userInfo, setUserInfo] = useState<UserInfoType>({
+        userId: null,
         address: "",
         twitterAccount: "",
         accountType: "Engager"
@@ -35,8 +37,14 @@ export default function SignUp() {
             const success = await signInWithEthereum();
             if(!success) return;
         }
+        if(step === 1) {
+            const data = await signUp(userInfo.address??"", userInfo.twitterAccount??"");
+            if(data.result) {
+                setUserInfo({ ...userInfo, userId: data.userId });    
+            } else return;        
+        }
         if(step === 2) {
-            const success = await signUp(userInfo);
+            const success = await setAccountType(userInfo.userId??"", userInfo.accountType??"");
             if(!success) return;
         }
         if(step === 3) {
@@ -100,7 +108,7 @@ export default function SignUp() {
                         <Input
                             label="Twitter Account"
                             name="twitterAccount"
-                            placeholder="username@twitter.com" 
+                            placeholder="Username" 
                             value={userInfo.twitterAccount??""}
                             onChange={onUserInfoChange}
                         />

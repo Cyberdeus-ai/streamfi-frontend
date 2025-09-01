@@ -1,12 +1,6 @@
 import api from "../utils/api";
 import toast from "react-hot-toast";
 
-type signUpProps = {
-    address?: string | null;
-    twitterAccount?: string;
-    accountType?: string;
-}
-
 export const getNonce = async () => {
     try {
         const res = await api.get("/auth/nonce");
@@ -30,9 +24,24 @@ export const verify = async (message: any, signature: any, nonce: any, address: 
     }
 }
 
-export const signUp = async (userInfo: signUpProps) => {
+export const signUp = async (address: string, twitterAccount: string) => {
     try {
-        const res = await api.post("/auth/signup", userInfo);
+        const res = await api.post('/auth/signup', {
+            address: address,
+            twitterAccount: twitterAccount
+        });
+        return res.data;
+    } catch (err) {
+        toast.error(`Error: ${err}`);
+    }
+}
+
+export const setAccountType = async (userId: string, accountType: string) => {
+    try {
+        const res = await api.post("/auth/accounttype", {
+            userId: userId,
+            accountType: accountType
+        });
         return res.data.result;
     } catch (err) {
        toast.error(`Error: ${err}`);
