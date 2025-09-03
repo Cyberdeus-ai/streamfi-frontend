@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { AiFillDashboard } from "react-icons/ai";
@@ -13,12 +13,26 @@ import { useAuth } from "@/context";
 type SidebarProps = {
     collapsed: boolean;
     onToggle: () => void;
+    onSetTitle: (title: string) => void
 };
 
-const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
+const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
+    const [selectedId, setSelectedId] = useState<number>(0);
+
     const router = useRouter();
     const { isAuthenticated, logout } = useAuth();
-    
+
+    useEffect(() => {
+        switch (router.pathname) {
+            case "leaderboard":
+                return setSelectedId(0);
+            case "tokenclaim":
+                return setSelectedId(1);
+            case "oversight":
+                return setSelectedId(2);
+        }
+    }, [router.pathname])
+
     return (
         <div className={`${collapsed ? 'w-16' : 'w-64'} bg-gray-900 h-screen flex flex-col transition-all duration-300`}>
             <div className="p-4 border-b border-gray-800 text-white flex items-center justify-between">
@@ -27,83 +41,80 @@ const Sidebar = ({ collapsed, onToggle }: SidebarProps) => {
             </div>
             <div className="flex-1 p-4">
                 <ul className="space-y-2">
-                    <li>
-                        <Link
+                    <li onClick={() => { onSetTitle('Leaderboard'); router.push("/leaderboard") }}>
+                        <div
                             className={
                                 clsx("flex items-center text-white rounded-lg hover:bg-blue-900/20",
-                                    router.pathname === "/leaderboard" && "bg-blue-900/20",
+                                    selectedId === 0 && "bg-blue-900/20",
                                     collapsed ? "px-2 py-2" : "px-3 py-3"
                                 )
                             }
-                            href="/leaderboard"
                         >
                             <AiFillDashboard className={clsx("text-xl", !collapsed && "mr-2")} />
                             {!collapsed && <span>Leaderboard</span>}
-                        </Link>
+                        </div>
                     </li>
-                    <li>
-                        <Link
+                    <li onClick={() => { onSetTitle('Token Claim'); router.push("/tokenclaim"); }}>
+                        <div
                             className={
                                 clsx("flex items-center text-white rounded-lg hover:bg-blue-900/20",
-                                    router.pathname === "/token" && "bg-blue-900/20",
+                                    selectedId === 1 && "bg-blue-900/20",
                                     collapsed ? "px-2 py-2" : "px-3 py-3"
                                 )
                             }
-                            href="/token"
                         >
                             <GiToken className={clsx("text-xl", !collapsed && "mr-2")} />
                             {!collapsed && <span>Token Claim</span>}
-                        </Link>
+                        </div>
                     </li>
-                    <li>
-                        <Link
+                    <li onClick={() => { onSetTitle('Admin Oversight'); router.push("/oversight") }}>
+                        <div
                             className={
                                 clsx("flex items-center text-white rounded-lg hover:bg-blue-900/20",
-                                    router.pathname === "/oversight" && "bg-blue-900/20",
+                                    selectedId === 2 && "bg-blue-900/20",
                                     collapsed ? "px-2 py-2" : "px-3 py-3"
                                 )
                             }
-                            href="/oversight"
                         >
                             <GiLog className={clsx("text-xl", !collapsed && "mr-2")} />
                             {!collapsed && <span>Admin Oversight</span>}
-                        </Link>
+                        </div>
                     </li>
                 </ul>
             </div>
             <div className="relative flex flex-col w-full min-w-0 p-2 px-10 mt-auto">
-                {!collapsed && 
+                {!collapsed &&
                     isAuthenticated ? (
-                        <div className="flex flex-col mt-10 pt-10 text-white">
-                            <Profile
-                                avatarUrl="/avatar.jpg"
-                                username="CyberDeus" 
-                                tokenBalance={0}
-                                campaignCount={0}
-                            />
-                            <Button
-                                className="mt-5"
-                                title="Sign Out"
-                                onClick={() => logout()}
-                                variant="secondary"
-                            />
-                        </div>
-                    ) : (
-                        <div className="flex flex-col mt-10 pt-10 text-white">
-                            <Button
-                                className="mt-5"
-                                title="Sign In"
-                                onClick={() => router.push("/auth/signin")}
-                                variant="primary"
-                            />
-                            <Button
-                                className="mt-5"
-                                title="Sign Up"
-                                onClick={() => router.push("/auth/signup")}
-                                variant="secondary"
-                            />
-                        </div>    
-                    )
+                    <div className="flex flex-col mt-10 pt-10 text-white">
+                        <Profile
+                            avatarUrl="/avatar.jpg"
+                            username="CyberDeus"
+                            tokenBalance={0}
+                            campaignCount={0}
+                        />
+                        <Button
+                            className="mt-5"
+                            title="Sign Out"
+                            onClick={() => logout()}
+                            variant="secondary"
+                        />
+                    </div>
+                ) : (
+                    <div className="flex flex-col mt-10 pt-10 text-white">
+                        <Button
+                            className="mt-5"
+                            title="Sign In"
+                            onClick={() => router.push("/auth/signin")}
+                            variant="primary"
+                        />
+                        <Button
+                            className="mt-5"
+                            title="Sign Up"
+                            onClick={() => router.push("/auth/signup")}
+                            variant="secondary"
+                        />
+                    </div>
+                )
                 }
             </div>
         </div>

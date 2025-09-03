@@ -1,4 +1,5 @@
 import React from "react";
+import { useRouter } from "next/router";
 
 type HeaderProps = {
     title: string;
@@ -7,11 +8,6 @@ type HeaderProps = {
 const Header = ({ title }: HeaderProps) => {
     return (
         <div>
-            <div className="flex items-center font-medium mr-4 ml-4 mt-4 cursor-pointer hover:text-gray-900">
-                <span className="cursor-pointer">Leaderboard</span>
-                <span className="ml-4">{">"}</span>
-                <div className="text-gray-900"></div>
-            </div>
             <div className="relative bg-gradient-to-r from-blue-900 to-purple-900 p-8 m-4 rounded-md">
                 <div className="absolute inset-0 opacity-20">
                     <div className="absolute top-0 left-0 w-full h-full">

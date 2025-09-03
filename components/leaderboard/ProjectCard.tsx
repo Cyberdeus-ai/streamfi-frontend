@@ -67,14 +67,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     const chartData = generateChartData();
 
     return (
-        <div className={`relative p-4 rounded-lg ${isPositive ? 'bg-green-900/30 border border-green-700/50' : 'bg-red-900/30 border border-red-700/50'
+        <div className={`relative p-4 rounded-lg shadow-md border ${isPositive ? 'bg-green-50 border-green-200' : 'bg-red-50 border-red-200'
             }`}>
             {getCrownIcon()}
             {getRankIcon()}
 
             <div className="flex items-center justify-between mb-3">
-                <h4 className="text-white font-semibold text-sm">{name}</h4>
-                <span className={`text-lg font-bold ${isPositive ? 'text-green-400' : 'text-red-400'
+                <h4 className="text-gray-800 font-semibold text-sm">{name}</h4>
+                <span className={`text-lg font-bold ${isPositive ? 'text-green-600' : 'text-red-600'
                     }`}>
                     {percentage}%
                 </span>

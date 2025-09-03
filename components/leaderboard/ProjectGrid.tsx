@@ -40,16 +40,16 @@ const ProjectGrid: React.FC = () => {
     const rankings = ['Top20', 'Top21-Top50', 'Top51-Top100'];
 
     return (
-        <div className="bg-gray-800 rounded-lg p-6">
+        <div className="bg-white rounded-lg p-6 shadow-lg border border-gray-200">
             <div className="flex flex-wrap items-center gap-4 mb-6">
-                <div className="flex bg-gray-700 rounded-lg p-1">
+                <div className="flex bg-gray-100 rounded-lg p-1 shadow-sm">
                     {rankings.map((ranking) => (
                         <button
                             key={ranking}
                             onClick={() => setSelectedRanking(ranking)}
                             className={`px-3 py-2 text-sm rounded-md transition-colors ${selectedRanking === ranking
-                                    ? 'bg-blue-600 text-white'
-                                    : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                                    ? 'bg-blue-600 text-white shadow-sm'
+                                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200'
                                 }`}
                         >
                             {ranking}
@@ -60,7 +60,7 @@ const ProjectGrid: React.FC = () => {
                 <select
                     value={selectedLanguage}
                     onChange={(e) => setSelectedLanguage(e.target.value)}
-                    className="bg-gray-700 text-white px-3 py-2 rounded-lg border border-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    className="bg-white text-gray-800 px-3 py-2 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 >
                     <option value="All Languages">All Languages</option>
                     <option value="English">English</option>
@@ -69,14 +69,14 @@ const ProjectGrid: React.FC = () => {
                     <option value="German">German</option>
                 </select>
 
-                <div className="flex bg-gray-700 rounded-lg p-1">
+                <div className="flex bg-gray-100 rounded-lg p-1 shadow-sm">
                     {timeframes.map((timeframe) => (
                         <button
                             key={timeframe}
                             onClick={() => setSelectedTimeframe(timeframe)}
                             className={`px-3 py-2 text-sm rounded-md transition-colors ${selectedTimeframe === timeframe
-                                    ? 'bg-green-600 text-white'
-                                    : 'text-gray-300 hover:text-white hover:bg-gray-600'
+                                    ? 'bg-green-600 text-white shadow-sm'
+                                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200'
                                 }`}
                         >
                             {timeframe}

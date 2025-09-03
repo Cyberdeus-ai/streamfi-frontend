@@ -24,24 +24,24 @@ const TopGainerTable: React.FC = () => {
     ];
 
     return (
-        <div className="bg-gray-800 rounded-lg p-4">
+        <div className="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-lg font-semibold text-white">Top Gainer</h3>
+                <h3 className="text-lg font-semibold text-gray-800">Top Gainer</h3>
                 <div className="flex space-x-2">
                     <button
                         onClick={() => setMetricType('absolute')}
-                        className={`px-3 py-1 rounded text-sm font-medium ${metricType === 'absolute'
+                        className={`px-3 py-1 rounded text-sm font-medium shadow-sm ${metricType === 'absolute'
                             ? 'bg-green-600 text-white'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-300'
                             }`}
                     >
                         ▲ Absolute (bps)
                     </button>
                     <button
                         onClick={() => setMetricType('relative')}
-                        className={`px-3 py-1 rounded text-sm font-medium ${metricType === 'relative'
+                        className={`px-3 py-1 rounded text-sm font-medium shadow-sm ${metricType === 'relative'
                             ? 'bg-green-600 text-white'
-                            : 'bg-gray-700 text-gray-300 hover:bg-gray-600'
+                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-300'
                             }`}
                     >
                         ▲ Relative (%)
@@ -52,7 +52,7 @@ const TopGainerTable: React.FC = () => {
             <div className="overflow-x-auto">
                 <table className="w-full">
                     <thead>
-                        <tr className="text-gray-400 text-sm border-b border-gray-700">
+                        <tr className="text-gray-500 text-sm border-b border-gray-200">
                             <th className="text-left pb-2">Project</th>
                             <th className="text-right pb-2">Current</th>
                             <th className="text-right pb-2">Δ1D</th>
@@ -63,13 +63,13 @@ const TopGainerTable: React.FC = () => {
                     </thead>
                     <tbody className="text-sm">
                         {projects.map((project, index) => (
-                            <tr key={index} className="border-b border-gray-700/50">
-                                <td className="py-2 text-white font-medium">{project.name}</td>
-                                <td className="py-2 text-right text-white">{project.current}%</td>
-                                <td className="py-2 text-right text-green-400">+{project.change1D}bps</td>
-                                <td className="py-2 text-right text-green-400">+{project.change7D}bps</td>
-                                <td className="py-2 text-right text-green-400">+{project.change30D}bps</td>
-                                <td className="py-2 text-right text-green-400">+{project.change3M}bps</td>
+                            <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
+                                <td className="py-2 text-gray-800 font-medium">{project.name}</td>
+                                <td className="py-2 text-right text-gray-800">{project.current}%</td>
+                                <td className="py-2 text-right text-green-600">+{project.change1D}bps</td>
+                                <td className="py-2 text-right text-green-600">+{project.change7D}bps</td>
+                                <td className="py-2 text-right text-green-600">+{project.change30D}bps</td>
+                                <td className="py-2 text-right text-green-600">+{project.change3M}bps</td>
                             </tr>
                         ))}
                     </tbody>

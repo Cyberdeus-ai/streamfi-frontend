@@ -22,3 +22,16 @@ export const getCampaignList = async () => {
         toast.error(`Error: ${err}`);
     }
 }
+
+export const getCampaignDetail = async (campaignId: number) => {
+    try {
+        const res = await api.post("/campaign/detail", {
+            campaignId: campaignId
+        });
+        if(res.data.result) {
+            return res.data.campaignDetail;
+        }
+    } catch(err) {
+        toast.error(`Error: ${err}`);
+    }
+}
