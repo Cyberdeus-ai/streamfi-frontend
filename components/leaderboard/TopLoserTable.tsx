@@ -15,12 +15,7 @@ const TopLoserTable: React.FC = () => {
     const projects: ProjectData[] = [
         { name: 'LINEA', current: 2.01, change1D: -195, change7D: -178, change30D: -145, change3M: -89 },
         { name: 'ABSTRACT', current: 1.13, change1D: -184, change7D: -167, change30D: -134, change3M: -78 },
-        { name: 'MONAD', current: 9.39, change1D: -176, change7D: -156, change30D: -123, change3M: -67 },
-        { name: 'MEGAETH', current: 2.30, change1D: -169, change7D: -145, change30D: -112, change3M: -56 },
-        { name: 'FALCON', current: 2.13, change1D: -162, change7D: -134, change30D: -101, change3M: -45 },
-        { name: 'MET', current: 2.03, change1D: -155, change7D: -123, change30D: -90, change3M: -34 },
-        { name: 'SURF', current: 1.89, change1D: -148, change7D: -112, change30D: -79, change3M: -23 },
-        { name: 'CAMP', current: 1.67, change1D: -141, change7D: -101, change30D: -68, change3M: -12 },
+        { name: 'MONAD', current: 9.39, change1D: -176, change7D: -156, change30D: -123, change3M: -67 }
     ];
 
     return (

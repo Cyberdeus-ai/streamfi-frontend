@@ -8,7 +8,7 @@ type HeaderProps = {
 const Header = ({ title }: HeaderProps) => {
     return (
         <div>
-            <div className="relative bg-gradient-to-r from-blue-900 to-purple-900 p-8 m-4 rounded-md">
+            <div className="relative bg-gradient-to-r from-blue-900 to-purple-900 p-8 my-4 rounded-md">
                 <div className="absolute inset-0 opacity-20">
                     <div className="absolute top-0 left-0 w-full h-full">
                         <svg width="100%" height="100%" viewBox="0 0 1200 200" className="w-full h-full">

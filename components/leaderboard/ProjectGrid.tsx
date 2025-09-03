@@ -12,27 +12,13 @@ interface Project {
 
 const ProjectGrid: React.FC = () => {
     const [selectedRanking, setSelectedRanking] = useState('Top20');
-    const [selectedLanguage, setSelectedLanguage] = useState('All Languages');
     const [selectedTimeframe, setSelectedTimeframe] = useState('24H');
 
     const projects: Project[] = [
         { name: 'MONAD', percentage: 9.39, isPositive: false, isCrown: true, crownType: 'gold' },
-        { name: 'BOUNDLESS', percentage: 3.71, isPositive: true },
-        { name: 'LOMBARD', percentage: 3.12, isPositive: false },
-        { name: 'PORTALT...', percentage: 2.86, isPositive: false },
-        { name: 'ANOMA', percentage: 4.90, isPositive: true, rank: 2, crownType: 'silver' },
+        { name: 'ANOMA', percentage: 4.90, isPositive: true, rank: 2, isCrown: true, crownType: 'silver' },
         { name: 'BILLIONS', percentage: 2.82, isPositive: false },
         { name: 'MITOSIS', percentage: 2.48, isPositive: true },
-        { name: 'SOMNIA', percentage: 2.38, isPositive: true },
-        { name: 'UNION', percentage: 2.36, isPositive: true },
-        { name: 'MAVRYK', percentage: 2.69, isPositive: true },
-        { name: 'MEGAETH', percentage: 2.30, isPositive: false },
-        { name: 'FALCON', percentage: 2.13, isPositive: false },
-        { name: 'MET', percentage: 2.03, isPositive: false },
-        { name: 'SURF', percentage: 1.89, isPositive: false },
-        { name: 'LINEA', percentage: 2.01, isPositive: false },
-        { name: 'CAMP', percentage: 1.67, isPositive: false },
-        { name: 'POLYMARKET', percentage: 4.69, isPositive: true },
         { name: 'ABSTRACT', percentage: 1.13, isPositive: false },
     ];
 
@@ -56,18 +42,6 @@ const ProjectGrid: React.FC = () => {
                         </button>
                     ))}
                 </div>
-
-                <select
-                    value={selectedLanguage}
-                    onChange={(e) => setSelectedLanguage(e.target.value)}
-                    className="bg-white text-gray-800 px-3 py-2 rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                >
-                    <option value="All Languages">All Languages</option>
-                    <option value="English">English</option>
-                    <option value="Spanish">Spanish</option>
-                    <option value="French">French</option>
-                    <option value="German">German</option>
-                </select>
 
                 <div className="flex bg-gray-100 rounded-lg p-1 shadow-sm">
                     {timeframes.map((timeframe) => (

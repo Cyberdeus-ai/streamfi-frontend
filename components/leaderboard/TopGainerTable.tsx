@@ -15,13 +15,8 @@ const TopGainerTable: React.FC = () => {
     const projects: ProjectData[] = [
         { name: 'ANOMA', current: 4.89, change1D: 205, change7D: 189, change30D: 156, change3M: 89 },
         { name: 'POLYMARKET', current: 4.69, change1D: 197, change7D: 178, change30D: 145, change3M: 78 },
-        { name: 'MAVRYK', current: 2.69, change1D: 190, change7D: 167, change30D: 134, change3M: 67 },
-        { name: 'BOUNDLESS', current: 3.71, change1D: 183, change7D: 156, change30D: 123, change3M: 56 },
-        { name: 'LOMBARD', current: 3.12, change1D: 176, change7D: 145, change30D: 112, change3M: 45 },
-        { name: 'PORTALT...', current: 2.86, change1D: 169, change7D: 134, change30D: 101, change3M: 34 },
-        { name: 'BILLIONS', current: 2.82, change1D: 162, change7D: 123, change30D: 90, change3M: 23 },
-        { name: 'MITOSIS', current: 2.48, change1D: 155, change7D: 112, change30D: 79, change3M: 12 },
-    ];
+        { name: 'MAVRYK', current: 2.69, change1D: 190, change7D: 167, change30D: 134, change3M: 67 }
+    ]
 
     return (
         <div className="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
