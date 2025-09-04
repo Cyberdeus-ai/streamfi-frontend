@@ -21,6 +21,7 @@ const Detail = ({ campaignInfo }: DetailProps) => {
             try {
                 loadingState(true);
                 const scoreList = await getScoreList(campaignInfo.id, selectedTimeframe);
+                console.log(scoreList);
                 const totalScore = scoreList.reduce((total: any, item: any) => {
                     return Number(total) + Number(item.score);
                 });
