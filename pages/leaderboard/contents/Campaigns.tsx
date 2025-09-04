@@ -7,10 +7,10 @@ import CampaignModal from '@/components/leaderboard/CampaignModal';
 
 type CampaignProps = {
     onSetFlag: (flag: boolean) => void;
-    onSetCampaignId: (id: number) => void
+    onSetCampaignInfo: (info: any) => void
 };
 
-const Campaigns = ({ onSetFlag, onSetCampaignId }: CampaignProps) => {
+const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
     const [campaignList, setCampaignList] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
@@ -33,7 +33,7 @@ const Campaigns = ({ onSetFlag, onSetCampaignId }: CampaignProps) => {
     }
 
     return (
-        <div className="p-6 space-y-6">
+        <div className="py-6 space-y-6">
             <div className="flex flex-row items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-900">Campaigns</h2>
                 {
@@ -54,12 +54,9 @@ const Campaigns = ({ onSetFlag, onSetCampaignId }: CampaignProps) => {
                     {
                         campaignList.map((campaign: any, index: number) => {
                             return (
-                                <div onClick={() => { onSetCampaignId(campaign.id); onSetFlag(true); }}>
+                                <div onClick={() => { onSetCampaignInfo(campaign); onSetFlag(true); }}>
                                     <CampaignItem
-                                        key={index}
-                                        title={campaign.tickers?.join(', ') ?? `Twitter Campaign_${index + 1}`}
-                                        url={`/twitter${index % 3 + 1}.png`}
-                                    />
+                                        key={index} title={campaign.tickers?.join(', ') ?? `Twitter Campaign_${index + 1}`} url={`/twitter${index % 3 + 1}.png`} />
                                 </div>
                             )
                         })

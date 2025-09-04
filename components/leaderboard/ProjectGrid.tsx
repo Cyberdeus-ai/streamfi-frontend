@@ -10,32 +10,29 @@ interface Project {
     crownType?: 'gold' | 'silver' | 'bronze';
 }
 
-const ProjectGrid: React.FC = () => {
-    const [selectedRanking, setSelectedRanking] = useState('Top20');
-    const [selectedTimeframe, setSelectedTimeframe] = useState('24H');
+type ProjectGridProps = {
+    projects: Project[],
+    selectedRanking: number,
+    setSelectedRanking: (value: number) => void,
+    selectedTimeframe: number,
+    setSelectedTimeframe: (value: number) => void,
+}
 
-    const projects: Project[] = [
-        { name: 'MONAD', percentage: 9.39, isPositive: false, isCrown: true, crownType: 'gold' },
-        { name: 'ANOMA', percentage: 4.90, isPositive: true, rank: 2, isCrown: true, crownType: 'silver' },
-        { name: 'BILLIONS', percentage: 2.82, isPositive: false },
-        { name: 'MITOSIS', percentage: 2.48, isPositive: true },
-        { name: 'ABSTRACT', percentage: 1.13, isPositive: false },
-    ];
+const timeframes = ['24H', '48H', '7D', '30D', '3M', '6M', '12M'];
+const rankings = ['Top20', 'Top21-Top50', 'Top51-Top100'];
 
-    const timeframes = ['24H', '48H', '7D', '30D', '3M', '6M', '12M'];
-    const rankings = ['Top20', 'Top21-Top50', 'Top51-Top100'];
-
+const ProjectGrid = ({ projects, selectedRanking, setSelectedRanking, selectedTimeframe, setSelectedTimeframe }: ProjectGridProps) => {
     return (
         <div className="bg-white rounded-lg p-6 shadow-lg border border-gray-200">
             <div className="flex flex-wrap items-center gap-4 mb-6">
                 <div className="flex bg-gray-100 rounded-lg p-1 shadow-sm">
-                    {rankings.map((ranking) => (
+                    {rankings.map((ranking, index) => (
                         <button
                             key={ranking}
-                            onClick={() => setSelectedRanking(ranking)}
-                            className={`px-3 py-2 text-sm rounded-md transition-colors ${selectedRanking === ranking
-                                    ? 'bg-blue-600 text-white shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200'
+                            onClick={() => setSelectedRanking(index)}
+                            className={`px-3 py-2 text-sm rounded-md transition-colors ${selectedRanking === index
+                                ? 'bg-blue-600 text-white shadow-sm'
+                                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200'
                                 }`}
                         >
                             {ranking}
@@ -44,13 +41,13 @@ const ProjectGrid: React.FC = () => {
                 </div>
 
                 <div className="flex bg-gray-100 rounded-lg p-1 shadow-sm">
-                    {timeframes.map((timeframe) => (
+                    {timeframes.map((timeframe, index) => (
                         <button
                             key={timeframe}
-                            onClick={() => setSelectedTimeframe(timeframe)}
-                            className={`px-3 py-2 text-sm rounded-md transition-colors ${selectedTimeframe === timeframe
-                                    ? 'bg-green-600 text-white shadow-sm'
-                                    : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200'
+                            onClick={() => setSelectedTimeframe(index)}
+                            className={`px-3 py-2 text-sm rounded-md transition-colors ${selectedTimeframe === index
+                                ? 'bg-green-600 text-white shadow-sm'
+                                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200'
                                 }`}
                         >
                             {timeframe}

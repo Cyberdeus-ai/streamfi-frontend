@@ -1,57 +1,49 @@
 import React, { useState, useEffect } from "react";
+import { useAuth } from "@/context";
 import ProjectGrid from "@/components/leaderboard/ProjectGrid";
 import TopGainerTable from "@/components/leaderboard/TopGainerTable";
 import TopLoserTable from "@/components/leaderboard/TopLoserTable";
-import { getCampaignList } from "@/actions/campaign";
+import { getScoreList } from "@/actions/score";
 
 type DetailProps = {
-    campaignId: number
+    campaignInfo: any
 }
 
-interface Campaign {
-    id: number;
-    title?: string;
-    tickers?: string[];
-    description?: string;
-    startDate?: string;
-    endDate?: string;
-    status?: string;
-}
-
-const Detail = ({ campaignId }: DetailProps) => {
-    const [campaign, setCampaign] = useState<Campaign | null>(null);
-    const [loading, setLoading] = useState(true);
+const Detail = ({ campaignInfo }: DetailProps) => {
+    const [projects, setProjects] = useState<any>([]);
+    const [selectedRanking, setSelectedRanking] = useState<number>(0);
+    const [selectedTimeframe, setSelectedTimeframe] = useState<number>(0);
+    
+    const { loading, loadingState } = useAuth();
 
     useEffect(() => {
-        const fetchCampaignDetails = async () => {
+        const fetchData = async () => {
             try {
-                setLoading(true);
-                const campaignList = await getCampaignList();
-                if (campaignList) {
-                    const selectedCampaign = campaignList.find((c: any) => c.id === campaignId);
-                    setCampaign(selectedCampaign || null);
-                }
+                loadingState(true);
+                const scoreList = await getScoreList(campaignInfo.id, selectedTimeframe);
+                const totalScore = scoreList.reduce((total: any, item: any) => {
+                    return Number(total) + Number(item.score);
+                });
+                setProjects(scoreList.map((score: any) => {
+                    return {
+                        name: score.user.username,
+                        percentage: Number(score.score) / Number(totalScore) * 100,
+                        isPositive: 1 - Math.random() > 0.5,
+                    }
+                }));
             } catch (error) {
                 console.error('Error fetching campaign details:', error);
             } finally {
-                setLoading(false);
+                loadingState(false);
             }
         };
 
-        if (campaignId) {
-            fetchCampaignDetails();
+        if (campaignInfo.id) {
+            fetchData();
         }
-    }, [campaignId]);
+    }, [campaignInfo.id]);
 
-    if (loading) {
-        return (
-            <div className="flex items-center justify-center min-h-[400px]">
-                <div className="text-gray-800 text-lg">Loading campaign details...</div>
-            </div>
-        );
-    }
-
-    if (!campaign) {
+    if (!campaignInfo) {
         return (
             <div className="flex items-center justify-center min-h-[400px]">
                 <div className="text-gray-800 text-lg">Campaign not found</div>
@@ -61,42 +53,40 @@ const Detail = ({ campaignId }: DetailProps) => {
 
     return (
         <div className="space-y-6">
-            {/* Campaign Header */}
             <div className="bg-white rounded-lg p-6 shadow-lg border border-gray-200">
                 <div className="flex items-center justify-between mb-4">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-800 mb-2">
-                            {campaign.title || campaign.tickers?.join(', ') || `Campaign ${campaignId}`}
+                            {campaignInfo.title || campaignInfo.handtags?.join(', ') || `Campaign ${campaignInfo.id}`}
                         </h1>
-                        {campaign.description && (
-                            <p className="text-gray-600">{campaign.description}</p>
+                        {campaignInfo.description && (
+                            <p className="text-gray-600">{campaignInfo.description}</p>
                         )}
                     </div>
                     <div className="text-right">
                         <div className="text-sm text-gray-500">Campaign ID</div>
-                        <div className="text-lg font-semibold text-gray-800">{campaignId}</div>
+                        <div className="text-lg font-semibold text-gray-800">{campaignInfo.id}</div>
                     </div>
                 </div>
                 
-                {/* Campaign Stats */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-100">
                         <div className="text-sm text-gray-500">Tickers</div>
                         <div className="text-lg font-semibold text-gray-800">
-                            {campaign.tickers?.join(', ') || 'N/A'}
+                            {campaignInfo.tickers?.join(', ') || 'N/A'}
                         </div>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-100">
                         <div className="text-sm text-gray-500">Status</div>
                         <div className="text-lg font-semibold text-green-600">
-                            {campaign.status || 'Active'}
+                            {campaignInfo.status || 'Active'}
                         </div>
                     </div>
                     <div className="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-100">
                         <div className="text-sm text-gray-500">Duration</div>
                         <div className="text-lg font-semibold text-gray-800">
-                            {campaign.startDate && campaign.endDate 
-                                ? `${new Date(campaign.startDate).toLocaleDateString()} - ${new Date(campaign.endDate).toLocaleDateString()}`
+                            {campaignInfo.startDate && campaignInfo.endDate 
+                                ? `${new Date(campaignInfo.startDate).toLocaleDateString()} - ${new Date(campaignInfo.endDate).toLocaleDateString()}`
                                 : 'Ongoing'
                             }
                         </div>
@@ -104,19 +94,22 @@ const Detail = ({ campaignId }: DetailProps) => {
                 </div>
             </div>
 
-            {/* Project Performance Grid */}
             <div>
                 <h2 className="text-xl font-semibold text-gray-800 mb-4">Project Performance</h2>
-                <ProjectGrid />
+                <ProjectGrid
+                    projects={projects}
+                    selectedRanking={selectedRanking}
+                    setSelectedRanking={setSelectedRanking}
+                    selectedTimeframe={selectedTimeframe}
+                    setSelectedTimeframe={setSelectedTimeframe}
+                />
             </div>
 
-            {/* Performance Tables */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 <TopGainerTable />
                 <TopLoserTable />
             </div>
 
-            {/* Additional Campaign Metrics */}
             <div className="bg-white rounded-lg p-6 shadow-lg border border-gray-200">
                 <h3 className="text-lg font-semibold text-gray-800 mb-4">Campaign Analytics</h3>
                 <div className="grid grid-cols-1 md:grid-cols-4 gap-4">

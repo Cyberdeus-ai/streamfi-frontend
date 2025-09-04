@@ -41,10 +41,10 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
             </div>
             <div className="flex-1 p-4">
                 <ul className="space-y-2">
-                    <li onClick={() => { onSetTitle('Leaderboard'); router.push("/leaderboard") }}>
+                    <li onClick={() => { onSetTitle('Leaderboard'); router.push("/leaderboard"); setSelectedId(0); }}>
                         <div
                             className={
-                                clsx("flex items-center text-white rounded-lg hover:bg-blue-900/20",
+                                clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
                                     selectedId === 0 && "bg-blue-900/20",
                                     collapsed ? "px-2 py-2" : "px-3 py-3"
                                 )
@@ -54,69 +54,77 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
                             {!collapsed && <span>Leaderboard</span>}
                         </div>
                     </li>
-                    <li onClick={() => { onSetTitle('Token Claim'); router.push("/tokenclaim"); }}>
-                        <div
-                            className={
-                                clsx("flex items-center text-white rounded-lg hover:bg-blue-900/20",
-                                    selectedId === 1 && "bg-blue-900/20",
-                                    collapsed ? "px-2 py-2" : "px-3 py-3"
-                                )
-                            }
-                        >
-                            <GiToken className={clsx("text-xl", !collapsed && "mr-2")} />
-                            {!collapsed && <span>Token Claim</span>}
-                        </div>
-                    </li>
-                    <li onClick={() => { onSetTitle('Admin Oversight'); router.push("/oversight") }}>
-                        <div
-                            className={
-                                clsx("flex items-center text-white rounded-lg hover:bg-blue-900/20",
-                                    selectedId === 2 && "bg-blue-900/20",
-                                    collapsed ? "px-2 py-2" : "px-3 py-3"
-                                )
-                            }
-                        >
-                            <GiLog className={clsx("text-xl", !collapsed && "mr-2")} />
-                            {!collapsed && <span>Admin Oversight</span>}
-                        </div>
-                    </li>
+                    {isAuthenticated && (
+                        <>
+                            <li onClick={() => { onSetTitle('Token Claim'); router.push("/tokenclaim"); setSelectedId(1); }}>
+                                <div
+                                    className={
+                                        clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
+                                            selectedId === 1 && "bg-blue-900/20",
+                                            collapsed ? "px-2 py-2" : "px-3 py-3"
+                                        )
+                                    }
+                                >
+                                    <GiToken className={clsx("text-xl", !collapsed && "mr-2")} />
+                                    {!collapsed && <span>Token Claim</span>}
+                                </div>
+                            </li>
+                            <li onClick={() => { onSetTitle('Admin Oversight'); router.push("/oversight"); setSelectedId(2); }}>
+                                <div
+                                    className={
+                                        clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
+                                            selectedId === 2 && "bg-blue-900/20",
+                                            collapsed ? "px-2 py-2" : "px-3 py-3"
+                                        )
+                                    }
+                                >
+                                    <GiLog className={clsx("text-xl", !collapsed && "mr-2")} />
+                                    {!collapsed && <span>Admin Oversight</span>}
+                                </div>
+                            </li>
+                        </>
+                    )}
                 </ul>
             </div>
-            <div className="relative flex flex-col w-full min-w-0 p-2 px-10 mt-auto">
-                {!collapsed &&
-                    isAuthenticated ? (
-                    <div className="flex flex-col mt-10 pt-10 text-white">
-                        <Profile
-                            avatarUrl="/avatar.jpg"
-                            username="CyberDeus"
-                            tokenBalance={0}
-                            campaignCount={0}
-                        />
-                        <Button
-                            className="mt-5"
-                            title="Sign Out"
-                            onClick={() => logout()}
-                            variant="secondary"
-                        />
-                    </div>
-                ) : (
-                    <div className="flex flex-col mt-10 pt-10 text-white">
-                        <Button
-                            className="mt-5"
-                            title="Sign In"
-                            onClick={() => router.push("/auth/signin")}
-                            variant="primary"
-                        />
-                        <Button
-                            className="mt-5"
-                            title="Sign Up"
-                            onClick={() => router.push("/auth/signup")}
-                            variant="secondary"
-                        />
+            {
+                !collapsed && (
+                    <div className="relative flex flex-col w-full min-w-0 p-2 px-10 mt-auto">
+                        {
+                            isAuthenticated ? (
+                                <div className="flex flex-col mt-10 pt-10 text-white">
+                                    <Profile
+                                        avatarUrl="/avatar.jpg"
+                                        username="CyberDeus"
+                                        tokenBalance={0}
+                                        campaignCount={0}
+                                    />
+                                    <Button
+                                        className="mt-5"
+                                        title="Sign Out"
+                                        onClick={() => logout()}
+                                        variant="secondary"
+                                    />
+                                </div>
+                            ) : (
+                                <div className="flex flex-col mt-10 pt-10 text-white">
+                                    <Button
+                                        className="mt-5"
+                                        title="Sign In"
+                                        onClick={() => router.push("/auth/signin")}
+                                        variant="primary"
+                                    />
+                                    <Button
+                                        className="mt-5"
+                                        title="Sign Up"
+                                        onClick={() => router.push("/auth/signup")}
+                                        variant="secondary"
+                                    />
+                                </div>
+                            )
+                        }
                     </div>
                 )
-                }
-            </div>
+            }
         </div>
     )
 }
