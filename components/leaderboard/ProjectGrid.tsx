@@ -12,34 +12,16 @@ interface Project {
 
 type ProjectGridProps = {
     projects: Project[],
-    selectedRanking: number,
-    setSelectedRanking: (value: number) => void,
     selectedTimeframe: number,
     setSelectedTimeframe: (value: number) => void,
 }
 
-const timeframes = ['24H', '48H', '7D', '30D', '3M', '6M', '12M'];
-const rankings = ['Top20', 'Top21-Top50', 'Top51-Top100'];
+const timeframes = ['7D', '30D', '3M', '6M', '12M'];
 
-const ProjectGrid = ({ projects, selectedRanking, setSelectedRanking, selectedTimeframe, setSelectedTimeframe }: ProjectGridProps) => {
+const ProjectGrid = ({ projects, selectedTimeframe, setSelectedTimeframe }: ProjectGridProps) => {
     return (
         <div className="bg-white rounded-lg p-6 shadow-lg border border-gray-200">
-            <div className="flex flex-wrap items-center gap-4 mb-6">
-                <div className="flex bg-gray-100 rounded-lg p-1 shadow-sm">
-                    {rankings.map((ranking, index) => (
-                        <button
-                            key={ranking}
-                            onClick={() => setSelectedRanking(index)}
-                            className={`px-3 py-2 text-sm rounded-md transition-colors ${selectedRanking === index
-                                ? 'bg-blue-600 text-white shadow-sm'
-                                : 'text-gray-600 hover:text-gray-800 hover:bg-gray-200'
-                                }`}
-                        >
-                            {ranking}
-                        </button>
-                    ))}
-                </div>
-
+            <div className="flex flex-row justify-end gap-4 mb-6">
                 <div className="flex bg-gray-100 rounded-lg p-1 shadow-sm">
                     {timeframes.map((timeframe, index) => (
                         <button

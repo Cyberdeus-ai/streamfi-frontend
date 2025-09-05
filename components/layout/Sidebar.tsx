@@ -34,7 +34,7 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
     }, [router.pathname])
 
     return (
-        <div className={`${collapsed ? 'w-16' : 'w-64'} bg-gray-900 h-screen flex flex-col transition-all duration-300`}>
+        <div className={`${collapsed ? 'w-16' : 'lg:w-64 w-16'} bg-gray-900 h-screen flex flex-col transition-all duration-300`}>
             <div className="p-4 border-b border-gray-800 text-white flex items-center justify-between">
                 {!collapsed && <Logo />}
                 <Toggle onToggle={onToggle} />
@@ -46,12 +46,12 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
                             className={
                                 clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
                                     selectedId === 0 && "bg-blue-900/20",
-                                    collapsed ? "px-2 py-2" : "px-3 py-3"
+                                    collapsed ? "px-2 py-2" : "lg:px-3 lg:py-3 px-2 py-2"
                                 )
                             }
                         >
-                            <AiFillDashboard className={clsx("text-xl", !collapsed && "mr-2")} />
-                            {!collapsed && <span>Leaderboard</span>}
+                            <AiFillDashboard className={clsx("lg:text-xl", !collapsed && "lg:mr-2")} />
+                            {!collapsed && <span className="lg:block hidden">Leaderboard</span>}
                         </div>
                     </li>
                     {isAuthenticated && (
@@ -61,12 +61,12 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
                                     className={
                                         clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
                                             selectedId === 1 && "bg-blue-900/20",
-                                            collapsed ? "px-2 py-2" : "px-3 py-3"
+                                            collapsed ? "px-2 py-2" : "lg:px-3 lg:py-3 px-2 py-2"
                                         )
                                     }
                                 >
-                                    <GiToken className={clsx("text-xl", !collapsed && "mr-2")} />
-                                    {!collapsed && <span>Token Claim</span>}
+                                    <GiToken className={clsx("lg:text-xl", !collapsed && "lg:mr-2")} />
+                                    {!collapsed && <span className="lg:block hidden">Token Claim</span>}
                                 </div>
                             </li>
                             <li onClick={() => { onSetTitle('Admin Oversight'); router.push("/oversight"); setSelectedId(2); }}>
@@ -74,12 +74,12 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
                                     className={
                                         clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
                                             selectedId === 2 && "bg-blue-900/20",
-                                            collapsed ? "px-2 py-2" : "px-3 py-3"
+                                            collapsed ? "px-2 py-2" : "lg:px-3 lg:py-3 px-2 py-2"
                                         )
                                     }
                                 >
-                                    <GiLog className={clsx("text-xl", !collapsed && "mr-2")} />
-                                    {!collapsed && <span>Admin Oversight</span>}
+                                    <GiLog className={clsx("lg:text-xl", !collapsed && "lg:mr-2")} />
+                                    {!collapsed && <span className="lg:block hidden">Admin Oversight</span>}
                                 </div>
                             </li>
                         </>
@@ -88,7 +88,7 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
             </div>
             {
                 !collapsed && (
-                    <div className="relative flex flex-col w-full min-w-0 p-2 px-10 mt-auto">
+                    <div className="relative flex flex-col w-full min-w-0 p-2 px-10 mt-auto lg:block hidden">
                         {
                             isAuthenticated ? (
                                 <div className="flex flex-col mt-10 pt-10 text-white">

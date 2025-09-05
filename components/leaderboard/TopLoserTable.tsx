@@ -1,22 +1,11 @@
 import React, { useState } from 'react';
 
-interface ProjectData {
-    name: string;
-    current: number;
-    change1D: number;
-    change7D: number;
-    change30D: number;
-    change3M: number;
+type LoserProps = {
+    losers: any
 }
 
-const TopLoserTable: React.FC = () => {
+const TopLoserTable = ({ losers }: LoserProps) => {
     const [metricType, setMetricType] = useState<'absolute' | 'relative'>('absolute');
-
-    const projects: ProjectData[] = [
-        { name: 'LINEA', current: 2.01, change1D: -195, change7D: -178, change30D: -145, change3M: -89 },
-        { name: 'ABSTRACT', current: 1.13, change1D: -184, change7D: -167, change30D: -134, change3M: -78 },
-        { name: 'MONAD', current: 9.39, change1D: -176, change7D: -156, change30D: -123, change3M: -67 }
-    ];
 
     return (
         <div className="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
@@ -48,23 +37,27 @@ const TopLoserTable: React.FC = () => {
                 <table className="w-full">
                     <thead>
                         <tr className="text-gray-500 text-sm border-b border-gray-200">
-                            <th className="text-left pb-2">Project</th>
+                            <th className="text-left pb-2">Name</th>
+                            <th className="text-left pb-2 text-gray-300 hidden lg:block"></th>
                             <th className="text-right pb-2">Current</th>
-                            <th className="text-right pb-2">Δ1D</th>
                             <th className="text-right pb-2">Δ7D</th>
                             <th className="text-right pb-2">Δ30D</th>
                             <th className="text-right pb-2">Δ3M</th>
+                            <th className="text-right pb-2">Δ6M</th>
+                            <th className="text-right pb-2">Δ1Y</th>
                         </tr>
                     </thead>
                     <tbody className="text-sm">
-                        {projects.map((project, index) => (
+                        {losers.map((loser: any, index: number) => (
                             <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                                <td className="py-2 text-gray-800 font-medium">{project.name}</td>
-                                <td className="py-2 text-right text-gray-800">{project.current}%</td>
-                                <td className="py-2 text-right text-red-600">{project.change1D}bps</td>
-                                <td className="py-2 text-right text-red-600">{project.change7D}bps</td>
-                                <td className="py-2 text-right text-red-600">{project.change30D}bps</td>
-                                <td className="py-2 text-right text-red-600">{project.change3M}bps</td>
+                                <td className="py-2 text-gray-800 font-medium">{loser.xaccount_name}</td>
+                                <td className="py-2 text-gray-800 font-medium">@{loser.xaccount_username}</td>
+                                <td className="py-2 text-right text-gray-800">{Number(loser.current / 100)}%</td>
+                                <td className="py-2 text-right text-red-600">{metricType === "absolute" ? `${loser.oneweek}bps` : `${Number(loser.oneweek / 100)}%`}</td>
+                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${loser.onemonth}bps` : `${Number(loser.onemonth / 100)}%`}</td>
+                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${loser.threemonths}bps` : `${Number(loser.threemonths / 100)}%`}</td>
+                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${loser.sixmonths}bps` : `${Number(loser.sixmonths / 100)}%`}</td>
+                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${loser.oneyear}bps` : `${Number(loser.oneyear / 100)}%`}</td>
                             </tr>
                         ))}
                     </tbody>
