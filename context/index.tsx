@@ -6,12 +6,23 @@ import { signInWithToken } from "@/actions/auth";
 import { setAuthToken } from "@/utils/setAuthToken";
 import { useRouter } from "next/navigation";
 
+interface User {
+    id?: string;
+    address?: string;
+    twitterAccount?: string;
+    profile_pic_url?: string;
+    username?: string;
+    tokenBalance?: number;
+    campaignCount?: number;
+    accountType?: string;
+}
+
 interface AuthContextType {
-    user: object | null;
+    user: User | null;
     isAuthenticated: boolean;
     loading: boolean;
     loadingState: (loading: boolean) => void;
-    login: (user: object) => void;
+    login: (user: User) => void;
     logout: () => void;
 }
 
@@ -29,13 +40,13 @@ export function useAuth() {
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    const [user, setUser] = useState<object | null>(null);
+    const [user, setUser] = useState<User | null>(null);
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
 
     const router = useRouter();
 
-    const login = (user: object) => {
+    const login = (user: User) => {
         setUser(user);
         setIsAuthenticated(true);
     }

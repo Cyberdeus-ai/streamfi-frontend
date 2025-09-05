@@ -20,7 +20,7 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
     const [selectedId, setSelectedId] = useState<number>(0);
 
     const router = useRouter();
-    const { isAuthenticated, logout } = useAuth();
+    const { isAuthenticated, logout, user } = useAuth();
 
     useEffect(() => {
         switch (router.pathname) {
@@ -93,10 +93,10 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
                             isAuthenticated ? (
                                 <div className="flex flex-col mt-10 pt-10 text-white">
                                     <Profile
-                                        avatarUrl="/avatar.jpg"
-                                        username="CyberDeus"
+                                        avatarUrl={user?.profile_pic_url??""}
+                                        username={user?.username??""}
                                         tokenBalance={0}
-                                        campaignCount={0}
+                                        campaignCount={user?.campaignCount??0}
                                     />
                                     <Button
                                         className="mt-5"
