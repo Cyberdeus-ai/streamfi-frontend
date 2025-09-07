@@ -32,6 +32,7 @@ api.interceptors.response.use(
                     break;
                 case 401:
                     toast.error("Unauthorized - maybe token expired");
+                    localStorage.removeItem("accessToken");
                     window.location.href = "/auth/signin";
                     break;
                 case 403:

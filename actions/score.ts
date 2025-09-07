@@ -3,7 +3,7 @@ import toast from "react-hot-toast";
 
 export const getScoreList = async (campaignId: any, period: number) => {
     try {
-        const res = await api.post("/score/list", {
+        const res = await api.post("/score/toplist", {
             campaignId: campaignId,
             period: period
         });
@@ -17,7 +17,7 @@ export const getScoreList = async (campaignId: any, period: number) => {
 
 export const getGainScoreList = async (campaignId: any) => {
     try {
-        const res = await api.post("/score/toplist", {
+        const res = await api.post("/score/list", {
             campaignId: campaignId
         });
         return res.data;

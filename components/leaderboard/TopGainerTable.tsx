@@ -37,27 +37,28 @@ const TopGainerTable = ({ gainers }: GainerProps) => {
                 <table className="w-full">
                     <thead>
                         <tr className="text-gray-600 text-sm border-b border-gray-200">
-                            <th className="text-left pb-2">Name</th>
-                            <th className="text-left pb-2 text-gray-300 hidden lg:block"></th>
-                            <th className="text-right pb-2">Current</th>
-                            <th className="text-right pb-2">Δ7D</th>
-                            <th className="text-right pb-2">Δ30D</th>
-                            <th className="text-right pb-2">Δ3M</th>
-                            <th className="text-right pb-2">Δ6M</th>
-                            <th className="text-right pb-2">Δ1Y</th>
+                            <th className="text-left pb-2 pr-2">Name</th>
+                            <th className="text-left pb-2 pr-2">Current</th>
+                            <th className="text-left pb-2 pr-2">Δ7D</th>
+                            <th className="text-left pb-2 pr-2">Δ30D</th>
+                            <th className="text-left pb-2 pr-2">Δ3M</th>
+                            <th className="text-left pb-2 pr-2">Δ6M</th>
+                            <th className="text-left pb-2 pr-2">Δ1Y</th>
                         </tr>
                     </thead>
                     <tbody className="text-sm">
                         {gainers.map((gainer: any, index: number) => (
                             <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                                <td className="py-2 text-gray-800 font-medium">{gainer.xaccount_name}</td>
-                                <td className="py-2 text-gray-800 font-medium">@{gainer.xaccount_username}</td>
-                                <td className="py-2 text-right text-gray-800">{Number(gainer.current / 100)}%</td>
-                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${gainer.oneweek}bps` : `${Number(gainer.oneweek / 100)}%`}</td>
-                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${gainer.onemonth}bps` : `${Number(gainer.onemonth / 100)}%`}</td>
-                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${gainer.threemonths}bps` : `${Number(gainer.threemonths / 100)}%`}</td>
-                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${gainer.sixmonths}bps` : `${Number(gainer.sixmonths / 100)}%`}</td>
-                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${gainer.oneyear}bps` : `${Number(gainer.oneyear / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-gray-800 font-medium">
+                                    {gainer.xaccount_name}
+                                    <span className='hidden lg:block'>@{gainer.xaccount_username}</span>
+                                </td>
+                                <td className="py-2 pr-2 text-left text-gray-800">{Number(gainer.current / 100)}%</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.oneweek}bps` : `${Number(gainer.oneweek / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.onemonth}bps` : `${Number(gainer.onemonth / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.threemonths}bps` : `${Number(gainer.threemonths / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.sixmonths}bps` : `${Number(gainer.sixmonths / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.oneyear}bps` : `${Number(gainer.oneyear / 100)}%`}</td>
                             </tr>
                         ))}
                     </tbody>

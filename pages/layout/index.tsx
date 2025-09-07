@@ -27,7 +27,7 @@ export default function Layout({ children }: LayoutProps) {
             <>
                 <div className="flex h-screen bg-white">
                     <Sidebar collapsed={collapsed} onToggle={onToggleHandler} onSetTitle={setTitle} />
-                    <div className="flex-1 overflow-auto mx-10 my-5">
+                    <div className="flex-1 overflow-auto mx-5 my-5">
                         <Header title={title} />
                         {children}
                     </div>

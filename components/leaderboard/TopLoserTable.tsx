@@ -37,27 +37,28 @@ const TopLoserTable = ({ losers }: LoserProps) => {
                 <table className="w-full">
                     <thead>
                         <tr className="text-gray-500 text-sm border-b border-gray-200">
-                            <th className="text-left pb-2">Name</th>
-                            <th className="text-left pb-2 text-gray-300 hidden lg:block"></th>
-                            <th className="text-right pb-2">Current</th>
-                            <th className="text-right pb-2">Δ7D</th>
-                            <th className="text-right pb-2">Δ30D</th>
-                            <th className="text-right pb-2">Δ3M</th>
-                            <th className="text-right pb-2">Δ6M</th>
-                            <th className="text-right pb-2">Δ1Y</th>
+                            <th className="text-left pb-2 pr-2">Name</th>
+                            <th className="text-left pb-2 pr-2">Current</th>
+                            <th className="text-left pb-2 pr-2">Δ7D</th>
+                            <th className="text-left pb-2 pr-2">Δ30D</th>
+                            <th className="text-left pb-2 pr-2">Δ3M</th>
+                            <th className="text-left pb-2 pr-2">Δ6M</th>
+                            <th className="text-left pb-2 pr-2">Δ1Y</th>
                         </tr>
                     </thead>
                     <tbody className="text-sm">
                         {losers.map((loser: any, index: number) => (
                             <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
-                                <td className="py-2 text-gray-800 font-medium">{loser.xaccount_name}</td>
-                                <td className="py-2 text-gray-800 font-medium">@{loser.xaccount_username}</td>
-                                <td className="py-2 text-right text-gray-800">{Number(loser.current / 100)}%</td>
-                                <td className="py-2 text-right text-red-600">{metricType === "absolute" ? `${loser.oneweek}bps` : `${Number(loser.oneweek / 100)}%`}</td>
-                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${loser.onemonth}bps` : `${Number(loser.onemonth / 100)}%`}</td>
-                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${loser.threemonths}bps` : `${Number(loser.threemonths / 100)}%`}</td>
-                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${loser.sixmonths}bps` : `${Number(loser.sixmonths / 100)}%`}</td>
-                                <td className="py-2 text-right text-green-600">{metricType === "absolute" ? `${loser.oneyear}bps` : `${Number(loser.oneyear / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-gray-800 font-medium">
+                                    {loser.xaccount_name}
+                                    <span className='hidden lg:block'>@{loser.xaccount_username}</span>
+                                </td>
+                                <td className="py-2 pr-2 text-left text-gray-800">{Number(loser.current / 100)}%</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.oneweek}bps` : `${Number(loser.oneweek / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.onemonth}bps` : `${Number(loser.onemonth / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.threemonths}bps` : `${Number(loser.threemonths / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.sixmonths}bps` : `${Number(loser.sixmonths / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.oneyear}bps` : `${Number(loser.oneyear / 100)}%`}</td>
                             </tr>
                         ))}
                     </tbody>

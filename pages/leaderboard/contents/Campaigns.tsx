@@ -49,12 +49,12 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
                     )
                 }
             </div>
-            <div className="rounded-md bg-white p-2 rounded-md shadow-md">
+            <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-5">
                 <div className="grid grid-cols-6 gap-x-2 gap-y-1">
                     {
                         campaignList.map((campaign: any, index: number) => {
                             return (
-                                <div onClick={() => { onSetCampaignInfo(campaign); onSetFlag(true); }}>
+                                <div key={index} onClick={() => { onSetCampaignInfo(campaign); onSetFlag(true); }}>
                                     <CampaignItem
                                         key={index} title={campaign.tickers?.join(', ') ?? `Twitter Campaign_${index + 1}`} url={`/twitter${index % 3 + 1}.png`} />
                                 </div>
