@@ -1,7 +1,7 @@
 module.exports = {
     apps: [
         {
-            name: 'streamfi-frontend',
+            name: 'frontend',
             script: 'npm run dev'
         }
     ],
