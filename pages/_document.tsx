@@ -1,4 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
+import api from "@/utils/api";
 
 export default function Document() {
   return (
