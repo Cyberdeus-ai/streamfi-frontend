@@ -9,5 +9,5 @@ export default function Home() {
     router.push("/leaderboard");
   }, [router]);
 
-  return <></>;
+  return <div></div>;
 }
