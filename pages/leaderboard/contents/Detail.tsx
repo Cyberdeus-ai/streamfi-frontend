@@ -74,9 +74,9 @@ const Detail = ({ campaignInfo }: DetailProps) => {
                     <div className="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-100">
                         <div className="text-sm text-gray-500">Status</div>
                         {
-                            new Date(campaignInfo.end_date).getTime() - new Date().getTime() > 0 ? 
-                            (<div className="text-md font-semibold text-green-600">Active</div>) : 
-                            (<div className="text-md font-semibold text-red-600">Inactive</div>)
+                            new Date(campaignInfo.end_date).getTime() - new Date().getTime() > 0 ?
+                                (<div className="text-md font-semibold text-green-600">Active</div>) :
+                                (<div className="text-md font-semibold text-red-600">Inactive</div>)
                         }
                     </div>
                     <div className="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-100">
@@ -109,18 +109,23 @@ const Detail = ({ campaignInfo }: DetailProps) => {
                 </div>
             </div>
 
-            <div>
+            {/* <div>
                 <HeatmapGrid campaignId={campaignInfo.id} />
-            </div>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <TopGainerTable gainers={gainers} />
-                <TopLoserTable losers={losers} />
-            </div>
-            
-            <div>
-                <Userboard users={users} />
-            </div>
-            
+            </div> */}
+            {
+                users && users.length > 0 && (
+                    <>
+                        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                            <TopGainerTable gainers={gainers} />
+                            <TopLoserTable losers={losers} />
+                        </div>
+                        <div>
+                            <Userboard users={users} />
+                        </div>
+
+                    </>
+                )
+            }
         </div>
     );
 };
