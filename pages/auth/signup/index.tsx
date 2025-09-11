@@ -7,6 +7,7 @@ import Button from "@/components/common/Button";
 import Mark from "@/components/common/Mark";
 import RadioGroup from "@/components/common/RadioGroup";
 import { signUp, setAccountType } from "@/actions/auth";
+import { useAuth } from "@/context";
 
 type UserInfoType = {
     userId: string | null;
@@ -25,6 +26,8 @@ export default function SignUp() {
     });
 
     const router = useRouter();
+
+    const { loadingState } = useAuth();
     
     const { isLoading, account, error, signInWithEthereum } = useSiwe();
 
@@ -38,13 +41,13 @@ export default function SignUp() {
             if(!success) return;
         }
         if(step === 1) {
-            const data = await signUp(userInfo.address??"", userInfo.twitterAccount??"");
-            if(data.result) {
+            const data = await signUp(userInfo.address??"", userInfo.twitterAccount??"", loadingState);
+            if(data?.result) {
                 setUserInfo({ ...userInfo, userId: data.userId });    
             } else return;        
         }
         if(step === 2) {
-            const success = await setAccountType(userInfo.userId??"", userInfo.accountType??"");
+            const success = await setAccountType(userInfo.userId??"", userInfo.accountType??"", loadingState);
             if(!success) return;
         }
         if(step === 3) {
@@ -85,6 +88,7 @@ export default function SignUp() {
                             {error && <p className="mt-4 font-bold text-red-700">{error}</p>}
                         </div>
                         <Button
+                            className="w-full"
                             title={isLoading ? "Signing Up..." : "Sign up with wallet"}
                             onClick={handleNextStep}
                             disabled={isLoading}
@@ -113,7 +117,7 @@ export default function SignUp() {
                             onChange={onUserInfoChange}
                         />
                         <Button
-                            className="mt-4"
+                            className="w-full mt-4"
                             title="Next"
                             onClick={handleNextStep}
                             variant="secondary"
@@ -143,7 +147,7 @@ export default function SignUp() {
                             />
                         </div>
                         <Button
-                            className="mt-4"
+                            className="w-full mt-4"
                             title="Next"
                             onClick={handleNextStep}
                             variant="secondary"
@@ -167,7 +171,7 @@ export default function SignUp() {
                             <p className="text-sm">Successfully</p>
                         </div>
                         <Button
-                            className="mt-4"
+                            className="w-full mt-4"
                             title="Done"
                             onClick={handleNextStep}
                             variant="secondary"

@@ -1,22 +1,21 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
 import { useRouter } from "next/router";
 import { AiFillDashboard } from "react-icons/ai";
 import { GiToken, GiLog } from "react-icons/gi";
 import clsx from "clsx"
 import Logo from "../common/Logo";
-import Toggle from "../common/Toggle";
+import Minimum from "../common/Minium";
 import Profile from "../common/Profile";
 import Button from "../common/Button";
 import { useAuth } from "@/context";
 
 type SidebarProps = {
     collapsed: boolean;
-    onToggle: () => void;
+    onMinimum: () => void;
     onSetTitle: (title: string) => void
 };
 
-const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
+const Sidebar = ({ collapsed, onMinimum, onSetTitle }: SidebarProps) => {
     const [selectedId, setSelectedId] = useState<number>(0);
 
     const router = useRouter();
@@ -37,11 +36,11 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
         <div className={`${collapsed ? 'w-16' : 'lg:w-64 w-16'} bg-gray-900 h-screen flex flex-col transition-all duration-300`}>
             <div className="p-4 border-b border-gray-800 text-white flex items-center justify-between">
                 {!collapsed && <Logo />}
-                <Toggle onToggle={onToggle} />
+                <Minimum onMinimum={onMinimum} />
             </div>
             <div className="flex-1 p-4">
                 <ul className="space-y-2">
-                    <li onClick={() => { onSetTitle('Leaderboard'); router.push("/leaderboard"); setSelectedId(0); }}>
+                    <li title={collapsed ? "leaderboard" : ""} onClick={() => { onSetTitle('Leaderboard'); router.push("/leaderboard"); setSelectedId(0); }}>
                         <div
                             className={
                                 clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
@@ -56,7 +55,7 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
                     </li>
                     {isAuthenticated && (
                         <>
-                            <li onClick={() => { onSetTitle('Token Claim'); router.push("/tokenclaim"); setSelectedId(1); }}>
+                            <li title={collapsed ? "token claim" : ""} onClick={() => { onSetTitle('Token Claim'); router.push("/tokenclaim"); setSelectedId(1); }}>
                                 <div
                                     className={
                                         clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
@@ -69,7 +68,7 @@ const Sidebar = ({ collapsed, onToggle, onSetTitle }: SidebarProps) => {
                                     {!collapsed && <span className="lg:block hidden">Token Claim</span>}
                                 </div>
                             </li>
-                            <li onClick={() => { onSetTitle('Admin Oversight'); router.push("/oversight"); setSelectedId(2); }}>
+                            <li title={collapsed ? "admin oversight" : ""} onClick={() => { onSetTitle('Admin Oversight'); router.push("/oversight"); setSelectedId(2); }}>
                                 <div
                                     className={
                                         clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",

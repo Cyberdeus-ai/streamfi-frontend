@@ -13,7 +13,7 @@ export default function Layout({ children }: LayoutProps) {
     const [collapsed, setCollapsed] = useState<boolean>(false);
     const [title, setTitle] = useState<string>("Leaderboard");
 
-    const onToggleHandler = () => {
+    const onMinimumHandler = () => {
         setCollapsed((prev) => !prev);
     }
 
@@ -26,7 +26,7 @@ export default function Layout({ children }: LayoutProps) {
         return (
             <>
                 <div className="flex h-screen bg-white">
-                    <Sidebar collapsed={collapsed} onToggle={onToggleHandler} onSetTitle={setTitle} />
+                    <Sidebar collapsed={collapsed} onMinimum={onMinimumHandler} onSetTitle={setTitle} />
                     <div className="flex-1 overflow-auto mx-5 my-5">
                         <Header title={title} />
                         {children}

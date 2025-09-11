@@ -12,7 +12,7 @@ import { setAuthToken } from "@/utils/setAuthToken";
 export default function SignIn() {
 
     const router = useRouter();
-    const { login } = useAuth();
+    const { login, loadingState } = useAuth();
 
     const onSignInClicked = async () => {
         if (typeof window !== "undefined" && window.ethereum) {
@@ -31,8 +31,8 @@ export default function SignIn() {
 
                 const address = await signer.getAddress()
 
-                const data = await signIn(address);
-                if(data.result) {
+                const data = await signIn(address, loadingState);
+                if (data.result) {
                     toast.success("Successfully signed in!");
                     login(data.user);
                     setAuthToken(data.token);
@@ -45,7 +45,7 @@ export default function SignIn() {
             toast.error("Ethereum provider is not available.");
         }
     }
-    
+
     return (
         <div className="min-h-screen bg-white">
             <TopNav />
@@ -63,7 +63,7 @@ export default function SignIn() {
                             <p className="text-sm">This won&apos;t cost you any gas.</p>
                         </div>
 
-                        <Button title="Sign In" onClick={onSignInClicked} variant="secondary" />
+                        <Button className="w-full" title="Sign In" onClick={onSignInClicked} variant="secondary" />
                     </div>
                 </div>
             </div>

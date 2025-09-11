@@ -1,14 +1,16 @@
+import clsx from 'clsx';
 import React, { useState, useEffect } from 'react';
 
 type TagInputProps = {
     label?: string;
     value?: string[];
-    name: string, 
+    name: string,
     onChange?: (name: string, tags: string[]) => void;
     placeholder?: string;
+    error?: boolean;
 }
 
-const TagInput = ({ label, value = [], name, onChange, placeholder = "Add a Tag" }: TagInputProps) => {
+const TagInput = ({ label, value = [], name, onChange, placeholder = "Add a Tag", error }: TagInputProps) => {
     const [tags, setTags] = useState<string[]>(value);
     const [inputValue, setInputValue] = useState('');
 
@@ -43,7 +45,11 @@ const TagInput = ({ label, value = [], name, onChange, placeholder = "Add a Tag"
                     {label}
                 </label>
             )}
-            <div className="flex flex-wrap items-center gap-2 min-h-[48px] px-4 py-2 border border-gray-300 rounded-lg focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent">
+            <div className={
+                clsx("flex flex-wrap items-center gap-2 min-h-[48px] px-4 py-2 border-2 rounded-lg \
+                     focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent",
+                     error ? "border-red-600" : "border-gray-300")
+            }>
                 {tags.map((tag, index) => (
                     <div
                         key={index}

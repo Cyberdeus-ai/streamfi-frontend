@@ -1,23 +1,28 @@
 import React from "react";
 
 type ToggleProps = {
-    onToggle: () => void
-}
+    label: string;
+    active: boolean;
+    onToggle: () => void;
+};
 
-const Toggle = ({ onToggle }: ToggleProps) => {
+const Toggle = ({ label, active, onToggle }: ToggleProps) => {
     return (
-        <div
-            aria-label="Toggle sidebar"
-            onClick={onToggle}
-            className="ml-auto rounded-md p-2 cursor-pointer hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        >
-            <svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="1" y="1" width="20" height="2" rx="1" fill="#e5e7eb" />
-                <rect x="1" y="8" width="20" height="2" rx="1" fill="#e5e7eb" />
-                <rect x="1" y="15" width="20" height="2" rx="1" fill="#e5e7eb" />
-            </svg>
+        <div className="flex items-center justify-end my-2">
+            <label className="text-sm font-medium text-gray-600 mr-2">{label}</label>
+            <button
+                type="button"
+                onClick={onToggle}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ${active ? 'bg-blue-600' : 'bg-gray-600'}`}
+                aria-pressed={active ? 'true' : 'false'}
+                aria-label={`Toggle ${label}`}
+            >
+                <span
+                    className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform duration-200 ${active ? 'translate-x-5' : 'translate-x-1'}`}
+                />
+            </button>
         </div>
-    )
-}
+    );
+};
 
 export default Toggle;

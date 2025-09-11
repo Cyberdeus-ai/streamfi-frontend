@@ -14,11 +14,11 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
     const [campaignList, setCampaignList] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const { isAuthenticated } = useAuth();
+    const { isAuthenticated, loadingState } = useAuth();
 
     useEffect(() => {
         async function fetchData() {
-            const data = await getCampaignList();
+            const data = await getCampaignList(loadingState);
             setCampaignList(data);
         }
         fetchData();
@@ -63,11 +63,13 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
                     }
                 </div>
             </div>
-            <CampaignModal
-                setList={setCampaignList}
-                isOpen={isModalOpen}
-                onClose={onCloseModal}
-            />
+            {isModalOpen && (
+                <CampaignModal
+                    setList={setCampaignList}
+                    isOpen={isModalOpen}
+                    onClose={onCloseModal}
+                />
+            )}
         </div>
     );
 };

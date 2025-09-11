@@ -18,7 +18,7 @@ const Modal = ({ isOpen, onClose, title, onOk, onCancel, children }: ModalProps)
             <div className="bg-white p-6 rounded-lg shadow-lg w-160">
                 <div className="flex justify-between items-center border-b pb-4">
                     <h3 className="text-xl font-semibold">{title}</h3>
-                    <button onClick={onClose} className="text-gray-500 cursor-pointer font-bold hover:text-gray-900">
+                    <button onClick={onClose} className="text-gray-500 text-2xl cursor-pointer font-bold hover:text-gray-900">
                         &times;
                     </button>
                 </div>

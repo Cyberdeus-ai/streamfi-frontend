@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         const fetch = async () => {
             try {
                 if(localStorage.getItem("accessToken")) {
-                    const data = await signInWithToken();
+                    const data = await signInWithToken(loadingState);
                     login(data.user);
                     setAuthToken(data.token);
                     router.push("/leaderboard");

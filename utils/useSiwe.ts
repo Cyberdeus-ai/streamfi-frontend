@@ -3,16 +3,17 @@ import { BrowserProvider } from "ethers";
 import { SiweMessage } from "siwe";
 import { getNonce, verify } from "@/actions/auth";
 
-const scheme = window.location.protocol.slice(0, -1);
-const domain = window.location.host;
-const origin = window.location.origin;
+
 
 export const useSiwe = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [account, setAccount] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
 
-    // Create a SIWE message; return null when nonce fetch fails
+    const scheme: string = typeof window !== 'undefined' ? window.location.protocol.slice(0, -1) : '';
+    const domain: string = typeof window !== 'undefined' ? window.location.host : '';
+    const origin: string = typeof window !== 'undefined' ? window.location.origin : '';
+
     const createSiweMessage = async (
         address: string,
         statement: string
@@ -55,7 +56,7 @@ export const useSiwe = () => {
                     setError("No accounts found");
                     return false;
                 }
-                
+
                 const provider = new BrowserProvider(window.ethereum);
                 const signer = await provider.getSigner();
 
@@ -74,8 +75,8 @@ export const useSiwe = () => {
                 const signature = await signer.signMessage(message);
 
                 const data = await verify(message, signature, nonce, address);
-                
-                if(data.result) {
+
+                if (data.result) {
                     result = true;
                     setAccount(address);
                 }

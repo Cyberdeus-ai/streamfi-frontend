@@ -24,8 +24,9 @@ export const verify = async (message: any, signature: any, nonce: any, address: 
     }
 }
 
-export const signUp = async (address: string, twitterAccount: string) => {
+export const signUp = async (address: string, twitterAccount: string, setLoading: (state: boolean) => void) => {
     try {
+        setLoading(true);
         const res = await api.post('/auth/signup', {
             address: address,
             twitterAccount: twitterAccount
@@ -33,35 +34,46 @@ export const signUp = async (address: string, twitterAccount: string) => {
         return res.data;
     } catch (err) {
         toast.error(`Error: ${err}`);
+    } finally {
+        setLoading(false);
     }
 }
 
-export const setAccountType = async (userId: string, accountType: string) => {
+export const setAccountType = async (userId: string, accountType: string, setLoading: (state: boolean) => void) => {
     try {
+        setLoading(true);
         const res = await api.post("/auth/accounttype", {
             userId: userId,
             accountType: accountType
         });
         return res.data.result;
     } catch (err) {
-       toast.error(`Error: ${err}`);
+        toast.error(`Error: ${err}`);
+    } finally {
+        setLoading(false);
     }
 }
 
-export const signIn = async (address: string) => {
+export const signIn = async (address: string, setLoading: (state: boolean) => void) => {
     try {
+        setLoading(true);
         const res = await api.post("/auth/signin", { address: address });
         return res.data;
     } catch (err) {
         toast.error(`Error: ${err}`);
+    } finally {
+        setLoading(false);
     }
 }
 
-export const signInWithToken = async () => {
+export const signInWithToken = async (setLoading: (state: boolean) => void) => {
     try {
+        setLoading(true);
         const res = await api.get("/auth/signin-with-token");
         return res.data;
     } catch (err) {
         toast.error(`Error: ${err}`);
-    }        
+    } finally {
+        setLoading(false);
+    }
 }

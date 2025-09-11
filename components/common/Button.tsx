@@ -28,8 +28,7 @@ const Button = ({ title, onClick, disabled, className, variant = "default" }: Bu
     return (
         <button
             className={
-                clsx("w-full cursor-pointer font-semibold py-3 px-6 rounded-lg transition-colors \
-                    duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2",
+                clsx("cursor-pointer font-semibold py-3 px-6 rounded-lg transition-colors duration-200 focus:outline-none",
                     setButtonVariant(variant),className
                 )
             }    
