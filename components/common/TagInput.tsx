@@ -48,7 +48,7 @@ const TagInput = ({ label, value = [], name, onChange, placeholder = "Add a Tag"
             <div className={
                 clsx("flex flex-wrap items-center gap-2 min-h-[48px] px-4 py-2 border-2 rounded-lg \
                      focus-within:ring-2 focus-within:ring-blue-500 focus-within:border-transparent",
-                     error ? "border-red-600" : "border-gray-300")
+                    error ? "border-red-600" : "border-gray-300")
             }>
                 {tags.map((tag, index) => (
                     <div
@@ -72,6 +72,15 @@ const TagInput = ({ label, value = [], name, onChange, placeholder = "Add a Tag"
                     onKeyDown={handleKeyPress}
                     placeholder={tags.length === 0 ? placeholder : ""}
                     className="flex-1 min-w-[120px] outline-none text-gray-700 placeholder-gray-400"
+                    onBlur={() => {
+                        const trimmedValue = inputValue.trim();
+                        if (trimmedValue !== '' && !tags.includes(trimmedValue)) {
+                            const newTags = [...tags, trimmedValue];
+                            setTags(newTags);
+                            onChange?.(name, newTags);
+                        }
+                        setInputValue('');
+                    }}
                 />
             </div>
         </div>
