@@ -1,4 +1,4 @@
-export const GDAv1Forwarder = [
+export const GDAv1ForwarderABI = [
     {
         "inputs": [
             {
@@ -294,3 +294,5 @@ export const GDAv1Forwarder = [
         "type": "function"
     }
 ];
+
+export const GDAv1ForwarderAddress = "0x6DA13Bde224A05a288748d857b9e7DDEffd1dE08";

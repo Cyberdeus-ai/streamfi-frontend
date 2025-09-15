@@ -50,15 +50,15 @@ const TopGainerTable = ({ gainers }: GainerProps) => {
                         {gainers.map((gainer: any, index: number) => (
                             <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
                                 <td className="py-2 pr-2 text-gray-800 font-medium">
-                                    {gainer.xaccount_name}
-                                    <span className='hidden lg:block'>@{gainer.xaccount_username}</span>
+                                    {gainer.name}
+                                    <span className='hidden lg:block'>@{gainer.username}</span>
                                 </td>
-                                <td className="py-2 pr-2 text-left text-gray-800">{Number(gainer.current / 100)}%</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.oneweek}bps` : `${Number(gainer.oneweek / 100)}%`}</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.onemonth}bps` : `${Number(gainer.onemonth / 100)}%`}</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.threemonths}bps` : `${Number(gainer.threemonths / 100)}%`}</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.sixmonths}bps` : `${Number(gainer.sixmonths / 100)}%`}</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${gainer.oneyear}bps` : `${Number(gainer.oneyear / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-gray-800">{gainer.current}%</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.oneweek * 100).toFixed(0)}bps` : `${gainer.oneweek}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.onemonth * 100).toFixed(0)}bps` : `${gainer.onemonth}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.threemonths * 100).toFixed(0)}bps` : `${gainer.threemonths}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.sixmonths * 100).toFixed(0)}bps` : `${gainer.sixmonths}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.oneyear * 100).toFixed(0)}bps` : `${gainer.oneyear}%`}</td>
                             </tr>
                         ))}
                     </tbody>

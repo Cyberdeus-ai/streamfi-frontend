@@ -50,15 +50,15 @@ const TopLoserTable = ({ losers }: LoserProps) => {
                         {losers.map((loser: any, index: number) => (
                             <tr key={index} className="border-b border-gray-100 hover:bg-gray-50">
                                 <td className="py-2 pr-2 text-gray-800 font-medium">
-                                    {loser.xaccount_name}
-                                    <span className='hidden lg:block'>@{loser.xaccount_username}</span>
+                                    {loser.name}
+                                    <span className='hidden lg:block'>@{loser.username}</span>
                                 </td>
-                                <td className="py-2 pr-2 text-left text-gray-800">{Number(loser.current / 100)}%</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.oneweek}bps` : `${Number(loser.oneweek / 100)}%`}</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.onemonth}bps` : `${Number(loser.onemonth / 100)}%`}</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.threemonths}bps` : `${Number(loser.threemonths / 100)}%`}</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.sixmonths}bps` : `${Number(loser.sixmonths / 100)}%`}</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${loser.oneyear}bps` : `${Number(loser.oneyear / 100)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-gray-800">{loser.current}%</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.oneweek * 100).toFixed(0)}bps` : `${loser.oneweek}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.onemonth * 100).toFixed(0)}bps` : `${loser.onemonth}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.threemonths * 100).toFixed(0)}bps` : `${loser.threemonths}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.sixmonths * 100).toFixed(0)}bps` : `${loser.sixmonths}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.oneyear * 100).toFixed(0)}bps` : `${loser.oneyear}%`}</td>
                             </tr>
                         ))}
                     </tbody>

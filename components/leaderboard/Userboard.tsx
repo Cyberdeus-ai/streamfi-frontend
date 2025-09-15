@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { FaCrown, FaCheckCircle, FaRegTimesCircle } from 'react-icons/fa';
 import clsx from 'clsx';
 import moment from 'moment';
@@ -11,17 +11,16 @@ interface User {
     sixmonths: number;
     threemonths: number;
     user_id: number;
-    xaccount_bot: boolean;
-    xaccount_created_at: Date;
-    xaccount_follower_count: number;
-    xaccount_id: string;
-    xaccount_is_blue_verified: boolean | null;
-    xaccount_is_verified: boolean | null;
-    xaccount_name: string;
-    xaccount_number_of_tweets: number;
-    xaccount_profile_pic_url: string | null
-    xaccount_user_id: number
-    xaccount_username: string
+    bot: boolean;
+    created_at: Date;
+    follower_count: number;
+    id: string;
+    is_blue_verified: boolean | null;
+    is_verified: boolean | null;
+    name: string;
+    number_of_tweets: number;
+    profile_pic_url: string | null;
+    username: string;
 }
 
 interface UserboardProps {
@@ -97,17 +96,17 @@ const Userboard = ({ users }: UserboardProps) => {
                                 <td className="py-2 pr-2">
                                     <div className="flex items-center space-x-3">
                                         <div className="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center overflow-hidden">
-                                            {user.xaccount_profile_pic_url ? (
-                                                <img src={user.xaccount_profile_pic_url} alt={user.xaccount_name} className="w-full h-full object-cover" />
+                                            {user.profile_pic_url ? (
+                                                <img src={user.profile_pic_url} alt={user.name} className="w-full h-full object-cover" />
                                             ) : (
                                                 <span className="text-white text-sm font-semibold">
-                                                    {user.xaccount_name.charAt(0).toUpperCase()}
+                                                    {user.name.charAt(0).toUpperCase()}
                                                 </span>
                                             )}
                                         </div>
                                         <div>
-                                            <div className="text-white font-medium">{user.xaccount_name}</div>
-                                            <div className="text-gray-400 text-sm">{user.xaccount_username}</div>
+                                            <div className="text-white font-medium">{user.name}</div>
+                                            <div className="text-gray-400 text-sm">{user.username}</div>
                                         </div>
                                     </div>
                                 </td>
@@ -115,10 +114,10 @@ const Userboard = ({ users }: UserboardProps) => {
                                     <span className="text-white font-medium">{(user.current / 100).toFixed(2)}%</span>
                                 </td>
                                 <td className="py-2 pr-2">
-                                    <span className="text-white font-medium">{moment(user.xaccount_created_at).format("YYYY-MM-DD")}</span>
+                                    <span className="text-white font-medium">{moment(user.created_at).format("YYYY-MM-DD")}</span>
                                 </td>
                                 <td className="py-2 pr-2">
-                                    {user.xaccount_is_blue_verified ? (
+                                    {user.is_blue_verified ? (
                                         <div className='text-xl text-green-300'>
                                             <FaCheckCircle />
                                         </div>
@@ -129,7 +128,7 @@ const Userboard = ({ users }: UserboardProps) => {
                                     )}
                                 </td>
                                 <td className="py-2 pr-2">
-                                    {user.xaccount_is_verified ? (
+                                    {user.is_verified ? (
                                         <div className='text-xl text-green-300'>
                                             <FaCheckCircle />
                                         </div>
@@ -140,7 +139,7 @@ const Userboard = ({ users }: UserboardProps) => {
                                     )}
                                 </td>
                                 <td className="py-2 pr-2">
-                                    <span className="text-white">{formatNumber(user.xaccount_follower_count)}</span>
+                                    <span className="text-white">{formatNumber(user.follower_count)}</span>
                                 </td>
                             </tr>
                         ))}

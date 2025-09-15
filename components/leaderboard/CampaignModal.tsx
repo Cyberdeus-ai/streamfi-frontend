@@ -9,7 +9,7 @@ import TagInput from "../common/TagInput";
 import moment from 'moment';
 import { createCampaign } from "@/actions/campaign";
 import { useAuth } from "@/context";
-import { GDAv1Forwarder } from "@/utils/contants";
+import { GDAv1ForwarderAddress, GDAv1ForwarderABI } from "@/utils/contants";
 
 type CampaignModalProps = {
     isOpen: boolean;
@@ -37,8 +37,8 @@ type CampaignEmpty = {
     bigAccounts?: boolean;
 }
 
-const forwarderAddress = '0x6DA13Bde224A05a288748d857b9e7DDEffd1dE08';
-const forwarderABI = GDAv1Forwarder;
+const forwarderAddress = GDAv1ForwarderAddress;
+const forwarderABI = GDAv1ForwarderABI;
 
 const CampaignModal = ({ isOpen, onClose, setList }: CampaignModalProps) => {
     const [campaign, setCampaign] = useState<Campaign | null>(null);
