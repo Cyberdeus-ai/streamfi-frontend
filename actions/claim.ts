@@ -6,7 +6,7 @@ export const getCampaignListByUser = async (setLoading: (state: boolean) => void
         setLoading(true);
         const res = await api.get('/claim/campaignlist');
         if(res.data.result) {
-            return res.data.campaignList;
+            return res.data.rewardList;
         }
     } catch (err) {
         toast.error(`Error: ${err}`);

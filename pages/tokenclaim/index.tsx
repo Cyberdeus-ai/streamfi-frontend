@@ -1,5 +1,5 @@
-import React, { use, useEffect, useMemo, useState } from "react";
-import { BrowserProvider, Contract, formatEther, JsonRpcProvider } from "ethers";
+import React, { useEffect, useState } from "react";
+import { BrowserProvider, Contract, formatEther } from "ethers";
 import toast from "react-hot-toast";
 import { useAuth } from "@/context";
 import { GDAv1ForwarderAddress, GDAv1ForwarderABI } from "@/utils/contants";
@@ -16,7 +16,6 @@ type ClaimInfo = {
 
 export default function TokenClaim() {
     const [balance, setBalance] = useState<string>("");
-    const [liveAddress, setLiveAddress] = useState<string>("");
     const [totalReward, setTotalReward] = useState<string>("")
     const [rewards, setRewards] = useState<any[]>([]);
     const [selectedPoolAddress, setSelectedPoolAddress] = useState<string>("");
@@ -26,63 +25,33 @@ export default function TokenClaim() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const campaignList = await getCampaignListByUser(loadingState);
-            const poolList = campaignList.map((campaign: any) => {
+            const rewardList = await getCampaignListByUser(loadingState);
+            const poolList = rewardList.map((campaign: any) => {
                 return {
                     address: campaign.reward_pool,
-                    handles: `@${campaign.handles.join(", @")}`
+                    handles: `@${campaign.handles.join(", @")}`,
+                    balance: campaign.balance
                 }
             });
+
+            const total = poolList.reduce((acc: number, curr: any) => acc + parseFloat(curr.balance), 0);
+            setTotalReward(total);
             setRewards(poolList);
             if (typeof window.ethereum !== 'undefined') {
-                try {
-                    await window.ethereum.request({ method: 'eth_requestAccounts' });
-                    const provider = new BrowserProvider(window.ethereum as any);
-                    const signer = await provider.getSigner();
-                    const address = await signer.getAddress();
-                    setLiveAddress(address);
-                    const network = await provider.getNetwork();
-                    if (network.chainId.toString() !== '11155111') {
-                        toast(`Error: MetaMask is not connected to Sepolia. Current ChainId: ${network.chainId}`);
-                        return;
-                    }
-                    const signerBalance = await provider.getBalance(address);
-                    const rpcProvider = new JsonRpcProvider(
-                        "https://eth-sepolia.g.alchemy.com/v2/wvr02pt12vKLo7IB5fT91"
-                    );
-                    const contractAddress = GDAv1ForwarderAddress;
-                    const contractABI = [
-                        "function transferFrom(address from, address to, uint value)",
-                        "function balanceOf(address owner) view returns (uint balance)",
-                    ];
-
-                    const contract = new Contract(
-                        contractAddress,
-                        contractABI,
-                        rpcProvider
-                    );
-
-                    const userAddress = liveAddress;
-                    const balance = await contract.balanceOf(userAddress);
-                    setTotalReward(formatEther(balance.toString()));
-                    setBalance(formatEther(signerBalance));
-                } catch (err) {
-                    toast(`Error: ${err}`);
+                await window.ethereum.request({ method: 'eth_requestAccounts' });
+                const provider = new BrowserProvider(window.ethereum as any);
+                const signer = await provider.getSigner();
+                const address = await signer.getAddress();
+                const network = await provider.getNetwork();
+                if (network.chainId.toString() !== '11155111') {
+                    toast(`Error: MetaMask is not connected to Sepolia. Current ChainId: ${network.chainId}`);
+                    return;
                 }
-            }
-        };
-        const fetchBalance = async () => {
-            try {
-                loadingState(true);
-
-            } catch (error) {
-                console.error("Error fetching blockchain balance:", error);
-            } finally {
-                loadingState(false);
+                const signerBalance = await provider.getBalance(address);
+                setBalance(formatEther(signerBalance.toString()));
             }
         };
         fetchData();
-        fetchBalance();
     }, []);
 
     const handleClaimFromPool = async () => {
@@ -121,8 +90,6 @@ export default function TokenClaim() {
             loadingState(false);
         }
     };
-
-    console.log(rewards);
 
     return (
         <div className="bg-white py-12 px-4 sm:px-6 lg:px-8">
@@ -178,7 +145,6 @@ export default function TokenClaim() {
                                     const { value } = e.target;
                                     setAmount(value);
                                 }}
-                                error={amount.trim() === ''}
                             />
                         </div>
                         <div className="flex flex-row justify-end">
