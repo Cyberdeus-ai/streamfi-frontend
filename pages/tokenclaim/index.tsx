@@ -128,7 +128,7 @@ export default function TokenClaim() {
                                 label="Campaign"
                                 name="selectedPoolAddress"
                                 value={selectedPoolAddress}
-                                options={rewards.map((reward: any) => ({
+                                options={rewards?.map((reward: any) => ({
                                     label: `${reward.handles} - ${reward.address}`, value: reward.address, disabled: false
                                 }))}
                                 onChange={(e) => { setSelectedPoolAddress(e.target.value as string) }}

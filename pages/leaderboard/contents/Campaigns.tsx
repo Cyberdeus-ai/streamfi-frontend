@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Button from "@/components/common/Button";
 import { useAuth } from '@/context';
-import CampaignItem from '@/components/leaderboard/CampaignItem';
+import moment from 'moment';
 import { getCampaignList } from '@/actions/campaign';
 import CampaignModal from '@/components/leaderboard/CampaignModal';
 
@@ -50,20 +50,48 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
                 }
             </div>
             <div className="bg-white rounded-lg shadow-lg border border-gray-200 p-5">
-                <div className="grid 2xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 grid-cols-1 gap-x-2 gap-y-1">
-                    {
-                        campaignList.map((campaign: any, index: number) => {
-                            return (
-                                <div key={index} onClick={() => { onSetCampaignInfo(campaign); onSetFlag(true); }}>
-                                    <CampaignItem
-                                        key={index}
-                                        tickers={campaign?.tickers}
-                                        handles={campaign?.handles}
-                                        url={`/twitter${index % 3 + 1}.png`} />
-                                </div>
-                            )
-                        })
-                    }
+                <div className="overflow-x-auto">
+                    <table className="w-full">
+                        <thead>
+                            <tr className="text-gray-600 text-sm border-b border-gray-200">
+                                <th className="text-left pb-2 pr-2 pl-2">Name</th>
+                                <th className="text-left pb-2 pr-2">Hashtags</th>
+                                <th className="text-left pb-2 pr-2 hidden sm:table-cell">Tickers</th>
+                                <th className="text-left pb-2 pr-2 hidden md:table-cell">Handles</th>
+                                <th className="text-left pb-2 pr-2 hidden xl:table-cell">Owner</th>
+                                <th className="text-left pb-2 pr-2 hidden 2xl:table-cell">Reward pool</th>
+                                <th className="text-left pb-2 pr-2">Start date</th>
+                                <th className="text-left pb-2 pr-2">End date</th>
+                            </tr>
+                        </thead>
+                        <tbody className="text-sm">
+                            {campaignList.map((campaign: any, index: number) => (
+                                <tr
+                                    key={index}
+                                    className="border-b border-gray-100 hover:bg-gray-100 cursor-pointer"
+                                    onClick={() => { onSetCampaignInfo(campaign); onSetFlag(true); }}
+                                >
+                                    <td className="py-2 pr-2 pl-2 text-gray-800 font-medium">
+                                        {campaign.name}
+                                    </td>
+                                    <td className="py-2 pr-2 text-left text-gray-800">{`#${campaign.hashtags.join(", #")}`}</td>
+                                    <td className="py-2 pr-2 text-left text-gray-800 hidden sm:table-cell">{`$${campaign.tickers.join(", $")}`}</td>
+                                    <td className="py-2 pr-2 text-left text-gray-800 hidden md:table-cell">{`@${campaign.handles.join(", @")}`}</td>
+                                    <td className="py-2 pr-2 text-gray-800 font-medium hidden xl:table-cell">
+                                        <div className="flex items-center space-x-3">
+                                            <div>
+                                                <div className="text-gray-800 font-medium">{campaign.xa_name}</div>
+                                                <div className="text-gray-600 text-sm">@{campaign.xa_username}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td className="py-2 pr-2 text-left text-gray-800 hidden 2xl:table-cell">{campaign.reward_pool}</td>
+                                    <td className="py-2 pr-2 text-left text-gray-800">{moment(campaign.start_date).format("YYYY-MM-DD")}</td>
+                                    <td className="py-2 pr-2 text-left text-gray-800">{moment(campaign.end_date).format("YYYY-MM-DD")}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
             {isModalOpen && (

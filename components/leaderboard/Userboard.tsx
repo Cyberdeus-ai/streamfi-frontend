@@ -111,7 +111,7 @@ const Userboard = ({ users }: UserboardProps) => {
                                     </div>
                                 </td>
                                 <td className="py-2 pr-2">
-                                    <span className="text-white font-medium">{(user.current / 100).toFixed(2)}%</span>
+                                    <span className="text-white font-medium">{user.current}%</span>
                                 </td>
                                 <td className="py-2 pr-2">
                                     <span className="text-white font-medium">{moment(user.created_at).format("YYYY-MM-DD")}</span>

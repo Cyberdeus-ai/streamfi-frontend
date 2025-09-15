@@ -1,36 +1,15 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 type GainerProps = {
     gainers: any
 }
 
 const TopGainerTable = ({ gainers }: GainerProps) => {
-    const [metricType, setMetricType] = useState<'absolute' | 'relative'>('absolute');
 
     return (
         <div className="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-800">Top Gainer</h3>
-                <div className="flex space-x-2">
-                    <button
-                        onClick={() => setMetricType('absolute')}
-                        className={`px-3 py-1 rounded text-sm font-medium shadow-sm ${metricType === 'absolute'
-                            ? 'bg-green-600 text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-300'
-                            }`}
-                    >
-                        ▲ Absolute (bps)
-                    </button>
-                    <button
-                        onClick={() => setMetricType('relative')}
-                        className={`px-3 py-1 rounded text-sm font-medium shadow-sm ${metricType === 'relative'
-                            ? 'bg-green-600 text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-300'
-                            }`}
-                    >
-                        ▲ Relative (%)
-                    </button>
-                </div>
             </div>
 
             <div className="overflow-x-auto">
@@ -54,11 +33,11 @@ const TopGainerTable = ({ gainers }: GainerProps) => {
                                     <span className='hidden lg:block'>@{gainer.username}</span>
                                 </td>
                                 <td className="py-2 pr-2 text-left text-gray-800">{gainer.current}%</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.oneweek * 100).toFixed(0)}bps` : `${gainer.oneweek}%`}</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.onemonth * 100).toFixed(0)}bps` : `${gainer.onemonth}%`}</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.threemonths * 100).toFixed(0)}bps` : `${gainer.threemonths}%`}</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.sixmonths * 100).toFixed(0)}bps` : `${gainer.sixmonths}%`}</td>
-                                <td className="py-2 pr-2 text-left text-green-600">{metricType === "absolute" ? `${(gainer.oneyear * 100).toFixed(0)}bps` : `${gainer.oneyear}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{`${gainer.oneweek.toFixed(2)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{`${gainer.onemonth.toFixed(2)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{`${gainer.threemonths.toFixed(2)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{`${gainer.sixmonths.toFixed(2)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-green-600">{`${gainer.oneyear.toFixed(2)}%`}</td>
                             </tr>
                         ))}
                     </tbody>

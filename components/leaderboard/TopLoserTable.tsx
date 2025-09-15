@@ -5,32 +5,10 @@ type LoserProps = {
 }
 
 const TopLoserTable = ({ losers }: LoserProps) => {
-    const [metricType, setMetricType] = useState<'absolute' | 'relative'>('absolute');
-
     return (
         <div className="bg-white rounded-lg p-4 shadow-lg border border-gray-200">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-gray-800">Top Loser</h3>
-                <div className="flex space-x-2">
-                    <button
-                        onClick={() => setMetricType('absolute')}
-                        className={`px-3 py-1 rounded text-sm font-medium shadow-sm ${metricType === 'absolute'
-                            ? 'bg-red-600 text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-300'
-                            }`}
-                    >
-                        ▲ Absolute (bps)
-                    </button>
-                    <button
-                        onClick={() => setMetricType('relative')}
-                        className={`px-3 py-1 rounded text-sm font-medium shadow-sm ${metricType === 'relative'
-                            ? 'bg-red-600 text-white'
-                            : 'bg-gray-100 text-gray-600 hover:bg-gray-200 border border-gray-300'
-                            }`}
-                    >
-                        ▲ Relative (%)
-                    </button>
-                </div>
             </div>
 
             <div className="overflow-x-auto">
@@ -54,11 +32,11 @@ const TopLoserTable = ({ losers }: LoserProps) => {
                                     <span className='hidden lg:block'>@{loser.username}</span>
                                 </td>
                                 <td className="py-2 pr-2 text-left text-gray-800">{loser.current}%</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.oneweek * 100).toFixed(0)}bps` : `${loser.oneweek}%`}</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.onemonth * 100).toFixed(0)}bps` : `${loser.onemonth}%`}</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.threemonths * 100).toFixed(0)}bps` : `${loser.threemonths}%`}</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.sixmonths * 100).toFixed(0)}bps` : `${loser.sixmonths}%`}</td>
-                                <td className="py-2 pr-2 text-left text-red-600">{metricType === "absolute" ? `${(loser.oneyear * 100).toFixed(0)}bps` : `${loser.oneyear}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{`${loser.oneweek.toFixed(2)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{`${loser.onemonth.toFixed(2)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{`${loser.threemonths.toFixed(2)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{`${loser.sixmonths.toFixed(2)}%`}</td>
+                                <td className="py-2 pr-2 text-left text-red-600">{`${loser.oneyear.toFixed(2)}%`}</td>
                             </tr>
                         ))}
                     </tbody>

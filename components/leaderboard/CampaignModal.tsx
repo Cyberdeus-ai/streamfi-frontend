@@ -18,6 +18,7 @@ type CampaignModalProps = {
 }
 
 type Campaign = {
+    name?: string;
     startDate?: Date;
     endDate?: Date;
     hashtags?: string[];
@@ -28,6 +29,7 @@ type Campaign = {
 }
 
 type CampaignEmpty = {
+    name?: boolean;
     startDate?: boolean;
     endDate?: boolean;
     hashtags?: boolean;
@@ -229,6 +231,16 @@ const CampaignModal = ({ isOpen, onClose, setList }: CampaignModalProps) => {
             onCancel={onCancelBtnClicked}
         >
             <div className="flex flex-col">
+                <div className="w-full">
+                    <Input
+                        label="Name"
+                        name="name"
+                        value={campaign?.name??""}
+                        onChange={onInputChanged}
+                        placeholder="Enter a campaign name"
+                        error={errors?.name}
+                    />
+                </div>
                 <div className="flex flex-row justify-between items-center">
                     <Input
                         label="Start date"
