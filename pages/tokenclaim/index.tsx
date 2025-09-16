@@ -37,6 +37,7 @@ export default function TokenClaim() {
             const total = poolList.reduce((acc: number, curr: any) => acc + parseFloat(curr.balance), 0);
             setTotalReward(total);
             setRewards(poolList);
+            setSelectedPoolAddress(poolList[0]?.address);
             if (typeof window.ethereum !== 'undefined') {
                 await window.ethereum.request({ method: 'eth_requestAccounts' });
                 const provider = new BrowserProvider(window.ethereum as any);
@@ -59,6 +60,7 @@ export default function TokenClaim() {
             toast.error("Please sign in to claim.");
             return;
         }
+
         if (!selectedPoolAddress || selectedPoolAddress.trim().length !== 42) {
             toast.error("Enter a valid pool address.");
             return;
@@ -131,7 +133,7 @@ export default function TokenClaim() {
                                 options={rewards?.map((reward: any) => ({
                                     label: `${reward.handles} - ${reward.address}`, value: reward.address, disabled: false
                                 }))}
-                                onChange={(e) => { setSelectedPoolAddress(e.target.value as string) }}
+                                onChange={(e) => { console.log(e); setSelectedPoolAddress(e.target.value as string) }}
                             />
                         </div>
                         <div className="w-full">
