@@ -416,7 +416,7 @@ const CampaignModal = ({ isOpen, onClose, setList }: CampaignModalProps) => {
                         </>
                     )
                 }
-                <div className="w-full text-lg text-red-600">
+                <div className="w-full text-lg text-gray-600">
                     {status}
                 </div>
             </div>

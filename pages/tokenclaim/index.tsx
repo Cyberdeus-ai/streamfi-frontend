@@ -83,7 +83,7 @@ export default function TokenClaim() {
             const forwarder = new Contract(GDAv1ForwarderAddress, GDAv1ForwarderABI, signer);
             const tx = await forwarder.claimAll(selectedPoolAddress, await signer.getAddress(), '0x');
             await tx.wait();
-            toast.success("Claimed available $TGN from pool");
+            toast.success("Claimed available ETHx from pool");
 
         } catch (err: any) {
             const message = err?.reason || err?.message || String(err);
