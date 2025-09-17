@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
-import { BrowserProvider, Contract, parseEther, formatEther, Interface, id, getAddress } from "ethers";
+import { BrowserProvider, Contract, parseEther, formatEther, id, getAddress } from "ethers";
 import toast from "react-hot-toast";
 import Modal from "../common/Modal";
 import Input from "../common/Input";
@@ -202,7 +202,7 @@ const CampaignModal = ({ isOpen, onClose, setList }: CampaignModalProps) => {
                 const poolLog = receipt.logs.find((log: any) => hash === log.topics[0]);
 
                 if (poolLog) {
-                    const poolAddress = getAddress('0x' + poolLog.topics[0].slice(26));
+                    const poolAddress = getAddress('0x' + poolLog.data.slice(26));
                     setCampaign((prev) => {
                         return {
                             ...prev,

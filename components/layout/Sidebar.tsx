@@ -68,19 +68,21 @@ const Sidebar = ({ collapsed, onMinimum, onSetTitle }: SidebarProps) => {
                                     {!collapsed && <span className="lg:block hidden">Token Claim</span>}
                                 </div>
                             </li>
-                            <li title={collapsed ? "admin oversight" : ""} onClick={() => { onSetTitle('Admin Oversight'); router.push("/oversight"); setSelectedId(2); }}>
-                                <div
-                                    className={
-                                        clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
-                                            selectedId === 2 && "bg-blue-900/20",
-                                            collapsed ? "px-2 py-2" : "lg:px-3 lg:py-3 px-2 py-2"
-                                        )
-                                    }
-                                >
-                                    <GiLog className={clsx("lg:text-xl", !collapsed && "lg:mr-2")} />
-                                    {!collapsed && <span className="lg:block hidden">Admin Oversight</span>}
-                                </div>
-                            </li>
+                            {user?.accountType === "Admin" && (
+                                <li title={collapsed ? "admin oversight" : ""} onClick={() => { onSetTitle('Admin Oversight'); router.push("/oversight"); setSelectedId(2); }}>
+                                    <div
+                                        className={
+                                            clsx("flex items-center cursor-pointer text-white rounded-lg hover:bg-blue-900/20",
+                                                selectedId === 2 && "bg-blue-900/20",
+                                                collapsed ? "px-2 py-2" : "lg:px-3 lg:py-3 px-2 py-2"
+                                            )
+                                        }
+                                    >
+                                        <GiLog className={clsx("lg:text-xl", !collapsed && "lg:mr-2")} />
+                                        {!collapsed && <span className="lg:block hidden">Admin Oversight</span>}
+                                    </div>
+                                </li>
+                            )}
                         </>
                     )}
                 </ul>
@@ -92,10 +94,10 @@ const Sidebar = ({ collapsed, onMinimum, onSetTitle }: SidebarProps) => {
                             isAuthenticated ? (
                                 <div className="flex flex-col mt-10 pt-10 text-white">
                                     <Profile
-                                        avatarUrl={user?.profile_pic_url??""}
-                                        username={user?.username??""}
+                                        avatarUrl={user?.profile_pic_url ?? ""}
+                                        username={user?.username ?? ""}
                                         tokenBalance={0}
-                                        campaignCount={user?.campaignCount??0}
+                                        campaignCount={user?.campaignCount ?? 0}
                                     />
                                     <Button
                                         className="mt-5"

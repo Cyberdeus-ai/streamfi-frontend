@@ -8,16 +8,12 @@ import DropDown from "@/components/common/DropDown";
 import Button from "@/components/common/Button";
 import Input from "@/components/common/Input";
 
-type ClaimInfo = {
-    currentToken: number;
-    availableToWithdraw: number;
-    campaigns: Record<string, number>;
-};
-
 export default function TokenClaim() {
     const [balance, setBalance] = useState<string>("");
-    const [totalReward, setTotalReward] = useState<string>("")
-    const [rewards, setRewards] = useState<any[]>([]);
+    const [totalReward, setTotalReward] = useState<bigint>(0n);
+    const [rewards, setRewards] = useState<bigint[]>([]);
+    const [campaigns, setCampaigns] = useState<any[]>([]);
+    const [pools, setPools] = useState<any[]>([]);
     const [selectedPoolAddress, setSelectedPoolAddress] = useState<string>("");
     const [amount, setAmount] = useState<string>("");
 
@@ -25,35 +21,84 @@ export default function TokenClaim() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const rewardList = await getCampaignListByUser(loadingState);
-            const poolList = rewardList.map((campaign: any) => {
-                return {
-                    address: campaign.reward_pool,
-                    handles: `@${campaign.handles.join(", @")}`,
-                    balance: campaign.balance
-                }
-            });
-
-            const total = poolList.reduce((acc: number, curr: any) => acc + parseFloat(curr.balance), 0);
-            setTotalReward(total);
-            setRewards(poolList);
-            setSelectedPoolAddress(poolList[0]?.address);
+            const campaignList = await getCampaignListByUser(loadingState);
+            setCampaigns(campaignList);
             if (typeof window.ethereum !== 'undefined') {
-                await window.ethereum.request({ method: 'eth_requestAccounts' });
-                const provider = new BrowserProvider(window.ethereum as any);
-                const signer = await provider.getSigner();
-                const address = await signer.getAddress();
-                const network = await provider.getNetwork();
-                if (network.chainId.toString() !== '11155111') {
-                    toast(`Error: MetaMask is not connected to Sepolia. Current ChainId: ${network.chainId}`);
-                    return;
+                loadingState(true);
+                try {
+                    await window.ethereum.request({ method: 'eth_requestAccounts' });
+                    const provider = new BrowserProvider(window.ethereum as any);
+                    const signer = await provider.getSigner();
+                    const address = await signer.getAddress();
+                    const network = await provider.getNetwork();
+                    if (network.chainId.toString() !== '11155111') {
+                        toast(`Error: MetaMask is not connected to Sepolia. Current ChainId: ${network.chainId}`);
+                        return;
+                    }
+                    const signerBalance = await provider.getBalance(address);
+                    setBalance(formatEther(signerBalance.toString()));
+                } catch (err) {
+                    toast.error(`Failed to fetch data: ${err}`);
+                } finally {
+                    loadingState(false);
                 }
-                const signerBalance = await provider.getBalance(address);
-                setBalance(formatEther(signerBalance.toString()));
             }
         };
+
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const provider = new BrowserProvider(window.ethereum as any);
+            const signer = await provider.getSigner();
+            const address = await signer.getAddress();
+            const contract = new Contract(GDAv1ForwarderAddress, GDAv1ForwarderABI, signer);
+
+            if (campaigns && campaigns.length > 0) {
+                setPools(campaigns.map((campaign: any) => ({
+                    address: campaign.reward_pool,
+                    handles: `@${campaign.handles.join(", @")}`
+                })));
+
+                setSelectedPoolAddress(campaigns[0]?.reward_pool);
+
+                const connectedPools = await Promise.all(campaigns.map(async (campaign: any) => {
+                    return await contract.isMemberConnected(campaign.reward_pool, address);
+                }));
+
+                if (!connectedPools.every((pool: boolean) => pool)) {
+                    await Promise.all(campaigns.filter((_: any, index: number) => !connectedPools[index]).map(async (campaign: any) => {
+                        return await contract.connectPool(campaign.reward_pool, "0x");
+                    }));
+                }
+            }
+        }
+
+        fetchData();
+
+        const intervalId = setInterval(() => {
+            if (campaigns && campaigns.length > 0) {
+                const rewardList: bigint[] = campaigns.map((campaign: any) => {
+                    const flowRate = BigInt(campaign.flowRate?.currentFlowRate ?? 0);
+                    const events = campaign.flowRate?.flowUpdatedEvents ?? [];
+                    const lastTimestampSec = BigInt(events?.[events.length - 1]?.timestamp ?? 0);
+                    const lastUpdatedAtMs = lastTimestampSec * 1000n;
+                    const streamedUntilUpdatedAt = BigInt(campaign.flowRate?.streamedUntilUpdatedAt ?? 0);
+                    const nowMs = BigInt(Date.now());
+                    const elapsedMs = nowMs > lastUpdatedAtMs ? nowMs - lastUpdatedAtMs : 0n;
+                    const streamedSince = (flowRate * elapsedMs) / 1000n;
+                    const reward = streamedSince + streamedUntilUpdatedAt;
+                    return reward;
+                });
+                const total: bigint = rewardList.reduce((acc: bigint, curr: bigint) => acc + curr, 0n);
+                setTotalReward(total);
+                setRewards(rewardList);
+            }
+        }, 100);
+
+        return () => clearInterval(intervalId);
+    }, [campaigns])
 
     const handleClaimFromPool = async () => {
         if (!isAuthenticated) {
@@ -107,7 +152,7 @@ export default function TokenClaim() {
                         <div className="flex justify-between items-center">
                             <span className="text-xl font-medium text-gray-900">Real time reward:</span>
                             <span className="text-xl font-semibold text-gray-900">
-                                {`${loading ? "-" : Number(totalReward).toFixed(5) ?? 0} ETHx`}
+                                {`${loading ? "-" : formatEther(totalReward.toString()) ?? '0.0000'} ETHx`}
                             </span>
                         </div>
 
@@ -118,8 +163,8 @@ export default function TokenClaim() {
                                 )}
                                 {!loading && rewards && rewards.length > 0 && rewards.map((reward: any, index: number) => {
                                     return (<div key={index} className="flex justify-between items-center py-2 px-3">
-                                        <span className="text-base text-gray-800">{reward.handles}</span>
-                                        <span className="text-base font-semibold text-gray-900">{reward.balance ? reward.balance : "0.00000"} ETHx</span>
+                                        <span className="text-base text-gray-800">{pools[index].handles}</span>
+                                        <span className="text-base font-semibold text-gray-900">{reward ? formatEther(reward.toString()) : "0.00000"} ETHx</span>
                                     </div>)
                                 })}
                             </div>
@@ -130,10 +175,10 @@ export default function TokenClaim() {
                                 label="Campaign"
                                 name="selectedPoolAddress"
                                 value={selectedPoolAddress}
-                                options={rewards?.map((reward: any) => ({
-                                    label: `${reward.handles} - ${reward.address}`, value: reward.address, disabled: false
+                                options={pools?.map((pool: any) => ({
+                                    label: `${pool.handles} - ${pool.address}`, value: pool.address, disabled: false
                                 }))}
-                                onChange={(e) => { console.log(e); setSelectedPoolAddress(e.target.value as string) }}
+                                onChange={(e) => { setSelectedPoolAddress(e.target.value as string) }}
                             />
                         </div>
                         <div className="w-full">

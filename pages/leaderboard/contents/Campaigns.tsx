@@ -14,7 +14,7 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
     const [campaignList, setCampaignList] = useState<any[]>([]);
     const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
-    const { isAuthenticated, loadingState } = useAuth();
+    const { isAuthenticated, user, loadingState } = useAuth();
 
     useEffect(() => {
         async function fetchData() {
@@ -37,7 +37,7 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
             <div className="flex flex-row items-center justify-between">
                 <h2 className="text-2xl font-bold text-gray-900">Campaigns</h2>
                 {
-                    isAuthenticated && (
+                    isAuthenticated && user?.accountType === "Admin" && (
                         <div className="w-50">
                             <Button
                                 className=""
@@ -65,7 +65,7 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
                             </tr>
                         </thead>
                         <tbody className="text-sm">
-                            {campaignList.map((campaign: any, index: number) => (
+                            {campaignList && campaignList.length > 0 ? campaignList.map((campaign: any, index: number) => (
                                 <tr
                                     key={index}
                                     className="border-b border-gray-100 hover:bg-gray-100 cursor-pointer"
@@ -89,7 +89,9 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
                                     <td className="py-2 pr-2 text-left text-gray-800">{moment(campaign.start_date).format("YYYY-MM-DD")}</td>
                                     <td className="py-2 pr-2 text-left text-gray-800">{moment(campaign.end_date).format("YYYY-MM-DD")}</td>
                                 </tr>
-                            ))}
+                            )) : (
+                                <div className="flex items-center justify-center h-[40vh]">No Campaign Found!</div>
+                            )}
                         </tbody>
                     </table>
                 </div>

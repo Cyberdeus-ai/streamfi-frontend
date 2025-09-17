@@ -296,3 +296,5 @@ export const GDAv1ForwarderABI = [
 ];
 
 export const GDAv1ForwarderAddress = "0x6DA13Bde224A05a288748d857b9e7DDEffd1dE08";
+
+export const SEPOLIA_RPC_URL = "https://eth-sepolia.g.alchemy.com/v2/wvr02pt12vKLo7IB5fT91"
