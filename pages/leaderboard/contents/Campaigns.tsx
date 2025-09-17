@@ -18,8 +18,13 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
 
     useEffect(() => {
         async function fetchData() {
-            const data = await getCampaignList(loadingState);
-            setCampaignList(data);
+            try {
+                loadingState(true);
+                const data = await getCampaignList();
+                setCampaignList(data);
+            } catch (_) { } finally {
+                loadingState(false);
+            }
         }
         fetchData();
     }, []);

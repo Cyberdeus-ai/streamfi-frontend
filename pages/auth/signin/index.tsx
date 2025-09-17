@@ -17,6 +17,7 @@ export default function SignIn() {
     const onSignInClicked = async () => {
         if (typeof window !== "undefined" && window.ethereum) {
             try {
+                loadingState(true);
                 const accounts = await window.ethereum.request({
                     method: "eth_requestAccounts",
                 }) as string[];
@@ -31,7 +32,7 @@ export default function SignIn() {
 
                 const address = await signer.getAddress()
 
-                const data = await signIn(address, loadingState);
+                const data = await signIn(address);
                 if (data.result) {
                     toast.success("Successfully signed in!");
                     login(data.user);
@@ -40,6 +41,8 @@ export default function SignIn() {
                 }
             } catch (err) {
                 toast.error("Failed to sign in with Ethereum.");
+            } finally {
+                loadingState(false);
             }
         } else {
             toast.error("Ethereum provider is not available.");

@@ -30,9 +30,9 @@ const AuthContext = createContext<AuthContextType>({
     user: null,
     isAuthenticated: false,
     loading: false,
-    loadingState: () => {},
-    login: () => {},
-    logout: () => {},
+    loadingState: () => { },
+    login: () => { },
+    logout: () => { },
 });
 
 export function useAuth() {
@@ -63,8 +63,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         const fetch = async () => {
             try {
-                if(localStorage.getItem("accessToken")) {
-                    const data = await signInWithToken(loadingState);
+                loadingState(true);
+                if (localStorage.getItem("accessToken")) {
+                    const data = await signInWithToken();
                     login(data.user);
                     setAuthToken(data.token);
                     router.push("/leaderboard");
@@ -72,9 +73,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 return;
             } catch (err) {
                 toast.error(`Error: ${err}`);
+            } finally {
+                loadingState(false);
             }
         }
-        fetch();    
+        fetch();
     }, []);
 
     return (

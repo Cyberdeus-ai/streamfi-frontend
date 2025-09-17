@@ -101,24 +101,29 @@ const CampaignModal = ({ isOpen, onClose, setList }: CampaignModalProps) => {
     }
 
     const onOkBtnClicked = async () => {
-        if (campaign) {
-            const isEmpty = Object.entries(campaign).every((_key: any, value: any) => value);
-            if (!isEmpty) {
-                const data = await createCampaign(campaign, loadingState);
-                setList(prevList => [...prevList, data]);
-                setCampaign(null);
-                onClose();
+        try {
+            loadingState(true);
+            if (campaign) {
+                const isEmpty = Object.entries(campaign).every((_key: any, value: any) => value);
+                if (!isEmpty) {
+                    const data = await createCampaign(campaign);
+                    setList(prevList => [...prevList, data]);
+                    setCampaign(null);
+                    onClose();
+                }
+            } else {
+                setErrors({
+                    startDate: true,
+                    endDate: true,
+                    hashtags: true,
+                    tickers: true,
+                    handles: true,
+                    rewardPool: true,
+                    bigAccounts: true
+                })
             }
-        } else {
-            setErrors({
-                startDate: true,
-                endDate: true,
-                hashtags: true,
-                tickers: true,
-                handles: true,
-                rewardPool: true,
-                bigAccounts: true
-            })
+        } catch (_) { } finally {
+            loadingState(false);
         }
     }
 
@@ -235,7 +240,7 @@ const CampaignModal = ({ isOpen, onClose, setList }: CampaignModalProps) => {
                     <Input
                         label="Name"
                         name="name"
-                        value={campaign?.name??""}
+                        value={campaign?.name ?? ""}
                         onChange={onInputChanged}
                         placeholder="Enter a campaign name"
                         error={errors?.name}

@@ -14,11 +14,16 @@ export default function Oversight() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const campaignList = await getCampaignList(loadingState);
-            setCampaigns(campaignList);
-            const userList = await getBadUserList(loadingState);
-            setUsers(userList);
-            setSelectedCampaign(campaigns[0]);
+            try {
+                loadingState(true);
+                const campaignList = await getCampaignList();
+                setCampaigns(campaignList);
+                const userList = await getBadUserList();
+                setUsers(userList);
+                setSelectedCampaign(campaigns[0]);
+            } catch (_) { } finally {
+                loadingState(false);
+            }
         }
         fetchData();
     }, []);

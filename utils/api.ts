@@ -9,7 +9,6 @@ if(typeof window !== "undefined") {
 
 const api = axios.create({
     baseURL: `${process.env.NEXT_PUBLIC_SERVER_URL}/api`,
-    timeout: 10_000,
     headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${accessToken}`

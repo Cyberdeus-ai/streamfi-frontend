@@ -28,38 +28,44 @@ export default function SignUp() {
     const router = useRouter();
 
     const { loadingState } = useAuth();
-    
+
     const { isLoading, account, error, signInWithEthereum } = useSiwe();
 
     useEffect(() => {
-        if(account !== "") setUserInfo({ ...userInfo, address: account });
+        if (account !== "") setUserInfo({ ...userInfo, address: account });
     }, [account]);
 
     const handleNextStep = async () => {
-        if(step === 0) {
-            const success = await signInWithEthereum();
-            if(!success) return;
+        try {
+            loadingState(true);
+            if (step === 0) {
+                const success = await signInWithEthereum();
+                if (!success) return;
+            }
+            if (step === 1) {
+                const data = await signUp(userInfo.address ?? "", userInfo.twitterAccount ?? "");
+                if (data?.result) {
+                    setUserInfo({ ...userInfo, userId: data.userId });
+                } else return;
+            }
+            if (step === 2) {
+                const success = await setAccountType(userInfo.userId ?? "", userInfo.accountType ?? "");
+                if (!success) return;
+            }
+            if (step === 3) {
+                router.push("/auth/signin");
+            }
+            if (step > 3) return;
+            setStep((prev) => prev + 1);
         }
-        if(step === 1) {
-            const data = await signUp(userInfo.address??"", userInfo.twitterAccount??"", loadingState);
-            if(data?.result) {
-                setUserInfo({ ...userInfo, userId: data.userId });    
-            } else return;        
+        catch (_) { } finally {
+            loadingState(false);
         }
-        if(step === 2) {
-            const success = await setAccountType(userInfo.userId??"", userInfo.accountType??"", loadingState);
-            if(!success) return;
-        }
-        if(step === 3) {
-            router.push("/auth/signin");
-        }
-        if(step > 3) return;    
-        setStep((prev) => prev + 1);
     }
 
     const onUserInfoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
-        
+
         setUserInfo({
             ...userInfo,
             [name]: value
@@ -67,7 +73,7 @@ export default function SignUp() {
     }
 
     const renderStepContent = () => {
-        switch(step) {
+        switch (step) {
             case 0:
                 return (
                     <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-10">
@@ -112,8 +118,8 @@ export default function SignUp() {
                         <Input
                             label="Twitter Account"
                             name="twitterAccount"
-                            placeholder="Username" 
-                            value={userInfo.twitterAccount??""}
+                            placeholder="Username"
+                            value={userInfo.twitterAccount ?? ""}
                             onChange={onUserInfoChange}
                         />
                         <Button
@@ -141,8 +147,8 @@ export default function SignUp() {
                             <RadioGroup
                                 label="Select account type"
                                 name="accountType"
-                                options={["Admin", "Engager"]} 
-                                selectedValue={userInfo?.accountType??"Engager"}
+                                options={["Admin", "Engager"]}
+                                selectedValue={userInfo?.accountType ?? "Engager"}
                                 onChange={onUserInfoChange}
                             />
                         </div>
@@ -180,13 +186,13 @@ export default function SignUp() {
                 );
         }
     }
-    
+
     return (
         <div className="min-h-screen bg-white">
             <TopNav />
             <div className="min-h-screen bg-gray-200 flex items-center justify-center p-4">
                 <div className="w-full max-w-md">
-                    { renderStepContent() }    
+                    {renderStepContent()}
                 </div>
             </div>
         </div>

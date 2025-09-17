@@ -21,10 +21,11 @@ export default function TokenClaim() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const campaignList = await getCampaignListByUser(loadingState);
+            loadingState(true);
+            const campaignList = await getCampaignListByUser();
             setCampaigns(campaignList);
             if (typeof window.ethereum !== 'undefined') {
-                loadingState(true);
+
                 try {
                     await window.ethereum.request({ method: 'eth_requestAccounts' });
                     const provider = new BrowserProvider(window.ethereum as any);
@@ -50,28 +51,36 @@ export default function TokenClaim() {
 
     useEffect(() => {
         const fetchData = async () => {
-            const provider = new BrowserProvider(window.ethereum as any);
-            const signer = await provider.getSigner();
-            const address = await signer.getAddress();
-            const contract = new Contract(GDAv1ForwarderAddress, GDAv1ForwarderABI, signer);
+            try {
+                loadingState(true);
+                const provider = new BrowserProvider(window.ethereum as any);
+                const signer = await provider.getSigner();
+                const address = await signer.getAddress();
+                const contract = new Contract(GDAv1ForwarderAddress, GDAv1ForwarderABI, signer);
 
-            if (campaigns && campaigns.length > 0) {
-                setPools(campaigns.map((campaign: any) => ({
-                    address: campaign.reward_pool,
-                    handles: `@${campaign.handles.join(", @")}`
-                })));
+                if (campaigns && campaigns.length > 0) {
+                    setPools(campaigns.map((campaign: any) => ({
+                        address: campaign.reward_pool,
+                        handles: `@${campaign.handles.join(", @")}`
+                    })));
 
-                setSelectedPoolAddress(campaigns[0]?.reward_pool);
+                    setSelectedPoolAddress(campaigns[0]?.reward_pool);
 
-                const connectedPools = await Promise.all(campaigns.map(async (campaign: any) => {
-                    return await contract.isMemberConnected(campaign.reward_pool, address);
-                }));
-
-                if (!connectedPools.every((pool: boolean) => pool)) {
-                    await Promise.all(campaigns.filter((_: any, index: number) => !connectedPools[index]).map(async (campaign: any) => {
-                        return await contract.connectPool(campaign.reward_pool, "0x");
+                    const connectedPools = await Promise.all(campaigns.map(async (campaign: any) => {
+                        return await contract.isMemberConnected(campaign.reward_pool, address);
                     }));
+
+                    if (!connectedPools.every((pool: boolean) => pool)) {
+                        await Promise.all(campaigns.filter((_: any, index: number) => !connectedPools[index]).map(async (campaign: any) => {
+                            return await contract.connectPool(campaign.reward_pool, "0x");
+                        }));
+                    }
                 }
+            } catch (err) {
+                toast(`Error: ${err}`);
+            } finally {
+                loadingState(false);
+
             }
         }
 
