@@ -95,7 +95,7 @@ const Campaigns = ({ onSetFlag, onSetCampaignInfo }: CampaignProps) => {
                                     <td className="py-2 pr-2 text-left text-gray-800">{moment(campaign.end_date).format("YYYY-MM-DD")}</td>
                                 </tr>
                             )) : (
-                                <div className="flex items-center justify-center h-[40vh]">No Campaign Found!</div>
+                                <tr className="flex items-center justify-center h-[40vh]">No Campaign Found!</tr>
                             )}
                         </tbody>
                     </table>
