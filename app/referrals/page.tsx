@@ -61,8 +61,6 @@ export default function ReferralsPage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  console.log("referrals here")
-
   const totalReferrals = referrals.length
   const totalPoints = referrals.reduce((sum, ref) => sum + ref.points, 0)
 
@@ -257,14 +255,14 @@ export default function ReferralsPage() {
 
                             {referrals.map((referral) => (
                               <div
-                                key={referral.id}
+                                key={referral?.id}
                                 className="grid grid-cols-4 gap-4 px-4 py-3 rounded-lg items-center hover:bg-secondary/50 transition-colors"
                               >
                                 <div className="flex items-center gap-3">
                                   <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center overflow-hidden">
                                     <Image
-                                      src={referral.avatar || "/avatar.jpg"}
-                                      alt={referral.username}
+                                      src={referral?.avatar || "/avatar.jpg"}
+                                      alt={referral?.username}
                                       width={40}
                                       height={40}
                                       className="rounded-full"
@@ -272,13 +270,13 @@ export default function ReferralsPage() {
                                   </div>
                                   <span className="font-medium">@{referral.username}</span>
                                 </div>
-                                <div className="text-sm text-muted-foreground">{referral.joinedAt}</div>
+                                <div className="text-sm text-muted-foreground">{referral?.joinedAt}</div>
                                 <div>
                                   <Badge variant="outline" className="bg-lime/10 text-lime border-lime/20">
-                                    {referral.status}
+                                    {referral?.status}
                                   </Badge>
                                 </div>
-                                <div className="text-right font-semibold">{referral.points.toLocaleString()}</div>
+                                <div className="text-right font-semibold">{referral?.points?.toLocaleString()}</div>
                               </div>
                             ))}
                           </div>
