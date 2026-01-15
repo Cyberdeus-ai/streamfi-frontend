@@ -8,3 +8,13 @@ export const joinCampaign = async (campaignId: number, userId: number, twitterRe
   })
   return response.data
 }
+
+export const getOversightUsers = async () => {
+  const response = await api.get("/oversight/users")
+  return response.data
+}
+
+export const updateUserStatus = async (userId: number, data: any) => {
+  const response = await api.put(`/oversight/users/${userId}`, data)
+  return response.data
+}

@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation"
 import { useEffect, useState, useMemo } from "react"
 import { useDebounce } from "@/hooks/use-debounce"
 import Image from "next/image"
-import { getOversightUsers, updateUserStatus } from "@/actions/oversight"
+import { getOversightUsers, updateUserStatus } from "@/actions/join"
 import { LoadingOverlay } from "@/components/ui/spinner"
 import { notifications } from "@/utils/toast"
 import { EmptyState } from "@/components/ui/empty-state"
@@ -73,6 +73,52 @@ export default function OversightPage() {
       failed: { variant: "outline", className: "bg-destructive/10 text-destructive border-destructive/20" },
     }
     return variants[status] || variants.passed
+  }
+
+  const handleBanUser = async (userItem: any) => {
+    if (!userItem.id) {
+      notifications.error("Invalid user ID")
+      return
+    }
+    const previousState = userItem.is_ban
+    setUpdatingIds(prev => new Set(prev).add(userItem.id))
+    setUsers(users.map(u => u.id === userItem.id ? { ...u, is_ban: !u.is_ban } : u))
+    try {
+      await updateUserStatus(userItem.id.toString(), { is_ban: !userItem?.is_ban })
+      notifications.success(`User ${previousState ? "unbanned" : "banned"}`)
+    } catch (error: any) {
+      setUsers(users.map(u => u.id === userItem.id ? { ...u, is_ban: previousState } : u))
+      notifications.error(error?.response?.data?.message || "Failed to update user status")
+    } finally {
+      setUpdatingIds(prev => {
+        const next = new Set(prev)
+        next.delete(userItem.id)
+        return next
+      })
+    }
+  }
+
+  const handleStreamUser = async (userItem: any) => {
+    if (!userItem.id) {
+      notifications.error("Invalid user ID")
+      return
+    }
+    const previousState = userItem.stream_status
+    setUpdatingIds(prev => new Set(prev).add(userItem.id))
+    setUsers(users.map(u => u.id === userItem.id ? { ...u, stream_status: !u.stream_status } : u))
+    try {
+      await updateUserStatus(userItem.id.toString(), { stream_status: !userItem?.stream_status })
+      notifications.success(`Stream ${previousState ? "paused" : "resumed"}`)
+    } catch (error: any) {
+      setUsers(users.map(u => u.id === userItem.id ? { ...u, stream_status: previousState } : u))
+      notifications.error(error?.response?.data?.message || "Failed to update stream status")
+    } finally {
+      setUpdatingIds(prev => {
+        const next = new Set(prev)
+        next.delete(userItem.id)
+        return next
+      })
+    }
   }
 
   const filteredUsers = useMemo(
@@ -146,143 +192,101 @@ export default function OversightPage() {
                     <div className="overflow-x-auto custom-scrollbar">
                       <div className="min-w-[1100px]">
                         <div className="grid grid-cols-11 gap-4 px-4 py-2 text-sm text-muted-foreground border-b border-border">
-                      <div>Avatar</div>
-                      <div className="col-span-2">User</div>
-                      <div>Created</div>
-                      <div>Bot Detection</div>
-                      <div>Sockpuppet</div>
-                      <div>Wallet</div>
-                      <div>Banned</div>
-                      <div>Streaming</div>
-                      <div className="col-span-2 text-right -ml-10">Actions</div>
-                    </div>
-
-                    {filteredUsers.map((userItem) => (
-                    <div
-                      key={userItem.id}
-                      className="grid grid-cols-11 gap-4 px-4 py-3 rounded-lg items-center hover:bg-secondary/50 transition-colors"
-                    >
-                      <div className="flex items-center justify-center">
-                        <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center overflow-hidden">
-                          <Image
-                            src={userItem.avatar || "/avatar.jpg"}
-                            alt={userItem.username}
-                            width={40}
-                            height={40}
-                            className="rounded-full"
-                          />
+                          <div>Avatar</div>
+                          <div className="col-span-2">User</div>
+                          <div>Created</div>
+                          <div>Bot Detection</div>
+                          <div>Sockpuppet</div>
+                          <div>Wallet</div>
+                          <div>Banned</div>
+                          <div>Streaming</div>
+                          <div className="col-span-2 text-right -ml-10">Actions</div>
                         </div>
-                      </div>
-                      <div className="col-span-2">
-                        <p className="font-medium">{userItem.name}</p>
-                        <p className="text-xs text-muted-foreground">@{userItem.username}</p>
-                      </div>
-                      <div className="text-sm text-muted-foreground">{userItem.created_at}</div>
-                      <div>
-                        <Badge {...getBotDetectionBadge(userItem.bot_detection)}>
-                          {userItem.bot_detection}
-                        </Badge>
-                      </div>
-                      <div>
-                        <Badge {...getSockpuppetBadge(userItem.sockpuppet_filters)}>
-                          {userItem.sockpuppet_filters}
-                        </Badge>
-                      </div>
-                      <div>
-                        {userItem.wallet_status ? (
-                          <Badge variant="outline" className="bg-lime/10 text-lime border-lime/20">
-                            Verified
-                          </Badge>
-                        ) : (
-                          <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
-                            Unverified
-                          </Badge>
-                        )}
-                      </div>
-                      <div>
-                        {userItem.is_ban ? (
-                          <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
-                            Banned
-                          </Badge>
-                        ) : (
-                          <Badge variant="outline" className="bg-lime/10 text-lime border-lime/20">
-                            Active
-                          </Badge>
-                        )}
-                      </div>
-                      <div>
-                        {userItem.stream_status ? (
-                          <Badge variant="outline" className="bg-cyan/10 text-cyan border-cyan/20">
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge variant="outline" className="bg-muted text-muted-foreground">
-                            Paused
-                          </Badge>
-                        )}
-                      </div>
-                      <div className="col-span-2 flex items-center justify-end gap-2 -ml-10">
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled={updatingIds.has(userItem.id)}
-                          onClick={async () => {
-                            if (!userItem.id) {
-                              notifications.error("Invalid user ID")
-                              return
-                            }
-                            const previousState = userItem.is_ban
-                            setUpdatingIds(prev => new Set(prev).add(userItem.id))
-                            setUsers(users.map(u => u.id === userItem.id ? { ...u, is_ban: !u.is_ban } : u))
-                            try {
-                              await updateUserStatus(userItem.id.toString(), { is_ban: !userItem.is_ban })
-                              notifications.success(`User ${previousState ? "unbanned" : "banned"}`)
-                            } catch (error: any) {
-                              setUsers(users.map(u => u.id === userItem.id ? { ...u, is_ban: previousState } : u))
-                              notifications.error(error?.response?.data?.message || "Failed to update user status")
-                            } finally {
-                              setUpdatingIds(prev => {
-                                const next = new Set(prev)
-                                next.delete(userItem.id)
-                                return next
-                              })
-                            }
-                          }}
-                        >
-                          {userItem.is_ban ? <Unlock className="w-4 h-4" /> : <Ban className="w-4 h-4" />}
-                        </Button>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled={updatingIds.has(userItem.id)}
-                          onClick={async () => {
-                            if (!userItem.id) {
-                              notifications.error("Invalid user ID")
-                              return
-                            }
-                            const previousState = userItem.stream_status
-                            setUpdatingIds(prev => new Set(prev).add(userItem.id))
-                            setUsers(users.map(u => u.id === userItem.id ? { ...u, stream_status: !u.stream_status } : u))
-                            try {
-                              await updateUserStatus(userItem.id.toString(), { stream_status: !userItem.stream_status })
-                              notifications.success(`Stream ${previousState ? "paused" : "resumed"}`)
-                            } catch (error: any) {
-                              setUsers(users.map(u => u.id === userItem.id ? { ...u, stream_status: previousState } : u))
-                              notifications.error(error?.response?.data?.message || "Failed to update stream status")
-                            } finally {
-                              setUpdatingIds(prev => {
-                                const next = new Set(prev)
-                                next.delete(userItem.id)
-                                return next
-                              })
-                            }
-                          }}
-                        >
-                          {userItem.stream_status ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
-                        </Button>
-                      </div>
-                    </div>
-                    ))}
+
+                        {filteredUsers.map((userItem) => (
+                          <div
+                            key={userItem.id}
+                            className="grid grid-cols-11 gap-4 px-4 py-3 rounded-lg items-center hover:bg-secondary/50 transition-colors"
+                          >
+                            <div className="flex items-center justify-center">
+                              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center overflow-hidden">
+                                <Image
+                                  src={userItem.avatar || "/avatar.jpg"}
+                                  alt={userItem.username}
+                                  width={40}
+                                  height={40}
+                                  className="rounded-full"
+                                />
+                              </div>
+                            </div>
+                            <div className="col-span-2">
+                              <p className="font-medium">{userItem.name}</p>
+                              <p className="text-xs text-muted-foreground">@{userItem.username}</p>
+                            </div>
+                            <div className="text-sm text-muted-foreground">{userItem.created_at}</div>
+                            <div>
+                              <Badge {...getBotDetectionBadge(userItem.bot_detection)}>
+                                {userItem.bot_detection}
+                              </Badge>
+                            </div>
+                            <div>
+                              <Badge {...getSockpuppetBadge(userItem.sockpuppet_filters)}>
+                                {userItem.sockpuppet_filters}
+                              </Badge>
+                            </div>
+                            <div>
+                              {userItem.wallet_status ? (
+                                <Badge variant="outline" className="bg-lime/10 text-lime border-lime/20">
+                                  Verified
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
+                                  Unverified
+                                </Badge>
+                              )}
+                            </div>
+                            <div>
+                              {userItem.is_ban ? (
+                                <Badge variant="outline" className="bg-destructive/10 text-destructive border-destructive/20">
+                                  Banned
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="bg-lime/10 text-lime border-lime/20">
+                                  Active
+                                </Badge>
+                              )}
+                            </div>
+                            <div>
+                              {userItem.stream_status ? (
+                                <Badge variant="outline" className="bg-cyan/10 text-cyan border-cyan/20">
+                                  Active
+                                </Badge>
+                              ) : (
+                                <Badge variant="outline" className="bg-muted text-muted-foreground">
+                                  Paused
+                                </Badge>
+                              )}
+                            </div>
+                            <div className="col-span-2 flex items-center justify-end gap-2 -ml-10">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={updatingIds.has(userItem.id)}
+                                onClick={ () => handleBanUser(userItem) }
+                              >
+                                {userItem.is_ban ? <Unlock className="w-4 h-4" /> : <Ban className="w-4 h-4" />}
+                              </Button>
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                disabled={updatingIds.has(userItem.id)}
+                                onClick={ () => handleStreamUser(userItem) }
+                              >
+                                {userItem.stream_status ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                              </Button>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </div>
                   </div>
