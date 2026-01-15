@@ -33,7 +33,7 @@ export default function RootLayout({
         <AuthProvider>
           <CampaignsProvider>
             <PoolsProvider>
-          {children}
+              {children}
             </PoolsProvider>
           </CampaignsProvider>
         </AuthProvider>

@@ -64,7 +64,7 @@ export default function ProjectsPage() {
               className="bg-gradient-to-r from-magenta to-gold text-background font-semibold text-lg px-8 py-6"
               asChild
             >
-              <Link href="/projects/create">
+              <Link href="/campaigns/create">
                 Create Campaign
                 <ArrowRight className="ml-2 w-5 h-5" />
               </Link>

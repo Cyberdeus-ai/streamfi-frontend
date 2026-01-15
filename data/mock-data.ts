@@ -374,9 +374,48 @@ export const mockReferrals = [
 ]
 
 export const mockCampaignReferrals = [
-  { id: 1, campaign: "Aave Protocol", totalReferrals: 234, conversionRate: "12.5%", revenue: 1250.50 },
-  { id: 2, campaign: "Uniswap", totalReferrals: 189, conversionRate: "15.2%", revenue: 980.25 },
-  { id: 3, campaign: "Chainlink", totalReferrals: 156, conversionRate: "10.8%", revenue: 750.40 },
+  {
+    id: 1,
+    campaign: "Aave Protocol",
+    totalReferrals: 234,
+    conversionRate: "12.5%",
+    revenue: 1250.50,
+    referrals: [
+      { id: 1, referrer: "whale_promoter", referee: "crypto_enthusiast", joinedAt: "2024-01-15", points: 5420 },
+      { id: 2, referrer: "crypto_chad", referee: "defi_trader", joinedAt: "2024-01-20", points: 3890 },
+      { id: 3, referrer: "defi_queen", referee: "nft_collector", joinedAt: "2024-02-01", points: 2150 },
+      { id: 4, referrer: "whale_promoter", referee: "web3_builder", joinedAt: "2024-02-10", points: 1280 },
+      { id: 5, referrer: "nft_maxi", referee: "eth_believer", joinedAt: "2024-02-12", points: 890 },
+      { id: 6, referrer: "crypto_chad", referee: "sol_degen", joinedAt: "2024-02-15", points: 1560 },
+    ],
+  },
+  {
+    id: 2,
+    campaign: "Uniswap",
+    totalReferrals: 189,
+    conversionRate: "15.2%",
+    revenue: 980.25,
+    referrals: [
+      { id: 7, referrer: "defi_queen", referee: "layer2_lover", joinedAt: "2024-01-18", points: 3200 },
+      { id: 8, referrer: "whale_promoter", referee: "airdrop_hunter", joinedAt: "2024-01-22", points: 2100 },
+      { id: 9, referrer: "crypto_chad", referee: "governance_guru", joinedAt: "2024-02-05", points: 1850 },
+      { id: 10, referrer: "nft_maxi", referee: "yield_farmer", joinedAt: "2024-02-08", points: 1450 },
+      { id: 11, referrer: "defi_queen", referee: "meme_lord", joinedAt: "2024-02-14", points: 980 },
+    ],
+  },
+  {
+    id: 3,
+    campaign: "Chainlink",
+    totalReferrals: 156,
+    conversionRate: "10.8%",
+    revenue: 750.40,
+    referrals: [
+      { id: 12, referrer: "eth_believer", referee: "alpha_seeker", joinedAt: "2024-01-25", points: 2750 },
+      { id: 13, referrer: "whale_promoter", referee: "crypto_enthusiast", joinedAt: "2024-02-03", points: 1920 },
+      { id: 14, referrer: "crypto_chad", referee: "defi_trader", joinedAt: "2024-02-11", points: 1680 },
+      { id: 15, referrer: "layer2_lover", referee: "web3_builder", joinedAt: "2024-02-16", points: 1120 },
+    ],
+  },
 ]
 
 export const mockUsers = [

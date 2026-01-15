@@ -13,11 +13,11 @@ import { LoadingOverlay } from "@/components/ui/spinner"
 import { EmptyState } from "@/components/ui/empty-state"
 import Image from "next/image"
 import { PageHeader } from "@/components/page-header"
-import { getReferrals } from "@/actions/referrals"
+import { getReferrals, getCampaignReferrals } from "@/actions/referrals"
 
 export default function ReferralsPage() {
   const { user } = useAuth()
-  const [referrals, setReferrals] = useState(mockReferrals)
+  const [referrals, setReferrals] = useState<any[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [copied, setCopied] = useState(false)
   const isAdmin = user?.account_type === "Admin"
@@ -27,14 +27,27 @@ export default function ReferralsPage() {
     const fetchData = async () => {
       try {
         setIsLoading(true)
-        const data = await getReferrals(user?.id || 0);
-        if (data?.result) {
-          setReferrals(data.referrals)
+        if (isAdmin) {
+          const data = await getCampaignReferrals(user?.id || 0)
+          if (data?.result) {
+            setReferrals(data.campaigns)
+          } else {
+            setReferrals(mockCampaignReferrals)
+          }
+        } else {
+          const data = await getReferrals(user?.id || 0);
+          if (data?.result) {
+            setReferrals(data.referrals)
+          } else {
+            setReferrals(mockReferrals)
+          }
+        }
+      } catch (error) {
+        if (isAdmin) {
+          setReferrals(mockCampaignReferrals)
         } else {
           setReferrals(mockReferrals)
         }
-      } catch (error) {
-        setReferrals(mockReferrals)
       } finally {
         setIsLoading(false)
       }
@@ -48,25 +61,16 @@ export default function ReferralsPage() {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  console.log("referrals here")
+
   const totalReferrals = referrals.length
   const totalPoints = referrals.reduce((sum, ref) => sum + ref.points, 0)
-
-  if (isLoading) {
-    return (
-      <AuthGuard>
-        <div className="min-h-screen bg-background">
-          <Sidebar />
-          <LoadingOverlay isLoading={true} message="Loading referrals..." />
-        </div>
-      </AuthGuard>
-    )
-  }
 
   return (
     <AuthGuard>
       <div className="min-h-screen bg-background">
         <Sidebar />
-
+        <LoadingOverlay isLoading={isLoading} message="Loading referrals..." />
         <main className="pl-0 lg:pl-64">
           <PageHeader
             title="Referrals"
@@ -133,7 +137,7 @@ export default function ReferralsPage() {
                     <CardTitle>Campaign Referral Analytics</CardTitle>
                   </CardHeader>
                   <CardContent>
-                    <div className="space-y-4">
+                    <div className="space-y-6">
                       <div className="overflow-x-auto custom-scrollbar">
                         <div className="min-w-[600px]">
                           <div className="grid grid-cols-4 gap-4 px-4 py-2 text-sm text-muted-foreground border-b border-border">
@@ -144,14 +148,34 @@ export default function ReferralsPage() {
                           </div>
 
                           {mockCampaignReferrals.map((campaign) => (
-                            <div
-                              key={campaign.id}
-                              className="grid grid-cols-4 gap-4 px-4 py-3 rounded-lg items-center hover:bg-secondary/50 transition-colors"
-                            >
-                              <div className="font-medium">{campaign.campaign}</div>
-                              <div className="text-right font-semibold">{campaign.totalReferrals.toLocaleString()}</div>
-                              <div className="text-right font-semibold text-lime">{campaign.conversionRate}</div>
-                              <div className="text-right font-semibold">${(campaign.revenue.toFixed(2)).toLocaleString()}</div>
+                            <div key={campaign.id}>
+                              <div className="grid grid-cols-4 gap-4 px-4 py-3 rounded-lg items-center hover:bg-secondary/50 transition-colors">
+                                <div className="font-medium">{campaign.campaign}</div>
+                                <div className="text-right font-semibold">{campaign.totalReferrals.toLocaleString()}</div>
+                                <div className="text-right font-semibold text-lime">{campaign.conversionRate}</div>
+                                <div className="text-right font-semibold">${(campaign.revenue.toFixed(2)).toLocaleString()}</div>
+                              </div>
+                              {campaign.referrals && campaign.referrals.length > 0 && (
+                                <div className="ml-4 mt-2 mb-4 border-l-2 border-border pl-4">
+                                  <div className="text-xs text-muted-foreground mb-2 font-medium">Referral Relationships</div>
+                                  <div className="space-y-2">
+                                    <div className="grid grid-cols-4 gap-4 px-2 py-1 text-xs text-muted-foreground border-b border-border/50">
+                                      <div>Referrer</div>
+                                      <div>Referee</div>
+                                      <div>Joined</div>
+                                      <div className="text-right">Points</div>
+                                    </div>
+                                    {campaign.referrals.map((ref) => (
+                                      <div key={ref.id} className="grid grid-cols-4 gap-4 px-2 py-2 rounded text-sm hover:bg-secondary/30 transition-colors">
+                                        <div className="font-medium">@{ref.referrer}</div>
+                                        <div>@{ref.referee}</div>
+                                        <div className="text-muted-foreground">{ref.joinedAt}</div>
+                                        <div className="text-right font-semibold">{ref.points.toLocaleString()}</div>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
                             </div>
                           ))}
                         </div>
@@ -269,6 +293,7 @@ export default function ReferralsPage() {
         </main>
       </div>
     </AuthGuard>
+
   )
 }
 
