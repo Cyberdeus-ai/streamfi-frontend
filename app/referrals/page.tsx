@@ -13,6 +13,7 @@ import { LoadingOverlay } from "@/components/ui/spinner"
 import { EmptyState } from "@/components/ui/empty-state"
 import Image from "next/image"
 import { PageHeader } from "@/components/page-header"
+import { getReferrals } from "@/actions/referrals"
 
 export default function ReferralsPage() {
   const { user } = useAuth()
@@ -24,10 +25,22 @@ export default function ReferralsPage() {
 
   useEffect(() => {
     const fetchData = async () => {
-      
+      try {
+        setIsLoading(true)
+        const data = await getReferrals(user?.id || 0);
+        if (data?.result) {
+          setReferrals(data.referrals)
+        } else {
+          setReferrals(mockReferrals)
+        }
+      } catch (error) {
+        setReferrals(mockReferrals)
+      } finally {
+        setIsLoading(false)
+      }
     }
     fetchData()
-  }, [])
+  }, [user?.id])
 
   const handleCopy = () => {
     navigator.clipboard.writeText(referralLink)
@@ -124,23 +137,23 @@ export default function ReferralsPage() {
                       <div className="overflow-x-auto custom-scrollbar">
                         <div className="min-w-[600px]">
                           <div className="grid grid-cols-4 gap-4 px-4 py-2 text-sm text-muted-foreground border-b border-border">
-                        <div>Campaign</div>
-                        <div className="text-right">Total Referrals</div>
-                        <div className="text-right">Conversion Rate</div>
-                        <div className="text-right">Revenue</div>
-                      </div>
+                            <div>Campaign</div>
+                            <div className="text-right">Total Referrals</div>
+                            <div className="text-right">Conversion Rate</div>
+                            <div className="text-right">Revenue</div>
+                          </div>
 
-                      {mockCampaignReferrals.map((campaign) => (
-                        <div
-                          key={campaign.id}
-                          className="grid grid-cols-4 gap-4 px-4 py-3 rounded-lg items-center hover:bg-secondary/50 transition-colors"
-                        >
-                          <div className="font-medium">{campaign.campaign}</div>
-                          <div className="text-right font-semibold">{campaign.totalReferrals.toLocaleString()}</div>
-                          <div className="text-right font-semibold text-lime">{campaign.conversionRate}</div>
-                          <div className="text-right font-semibold">${(campaign.revenue.toFixed(2)).toLocaleString()}</div>
-                        </div>
-                      ))}
+                          {mockCampaignReferrals.map((campaign) => (
+                            <div
+                              key={campaign.id}
+                              className="grid grid-cols-4 gap-4 px-4 py-3 rounded-lg items-center hover:bg-secondary/50 transition-colors"
+                            >
+                              <div className="font-medium">{campaign.campaign}</div>
+                              <div className="text-right font-semibold">{campaign.totalReferrals.toLocaleString()}</div>
+                              <div className="text-right font-semibold text-lime">{campaign.conversionRate}</div>
+                              <div className="text-right font-semibold">${(campaign.revenue.toFixed(2)).toLocaleString()}</div>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -212,38 +225,38 @@ export default function ReferralsPage() {
                         <div className="overflow-x-auto custom-scrollbar">
                           <div className="min-w-[600px]">
                             <div className="grid grid-cols-4 gap-4 px-4 py-2 text-sm text-muted-foreground border-b border-border">
-                          <div>User</div>
-                          <div>Joined</div>
-                          <div>Status</div>
-                          <div className="text-right">Points</div>
-                        </div>
+                              <div>User</div>
+                              <div>Joined</div>
+                              <div>Status</div>
+                              <div className="text-right">Points</div>
+                            </div>
 
-                        {referrals.map((referral) => (
-                          <div
-                            key={referral.id}
-                            className="grid grid-cols-4 gap-4 px-4 py-3 rounded-lg items-center hover:bg-secondary/50 transition-colors"
-                          >
-                            <div className="flex items-center gap-3">
-                              <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center overflow-hidden">
-                                <Image
-                                  src={referral.avatar || "/avatar.jpg"}
-                                  alt={referral.username}
-                                  width={40}
-                                  height={40}
-                                  className="rounded-full"
-                                />
+                            {referrals.map((referral) => (
+                              <div
+                                key={referral.id}
+                                className="grid grid-cols-4 gap-4 px-4 py-3 rounded-lg items-center hover:bg-secondary/50 transition-colors"
+                              >
+                                <div className="flex items-center gap-3">
+                                  <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center overflow-hidden">
+                                    <Image
+                                      src={referral.avatar || "/avatar.jpg"}
+                                      alt={referral.username}
+                                      width={40}
+                                      height={40}
+                                      className="rounded-full"
+                                    />
+                                  </div>
+                                  <span className="font-medium">@{referral.username}</span>
+                                </div>
+                                <div className="text-sm text-muted-foreground">{referral.joinedAt}</div>
+                                <div>
+                                  <Badge variant="outline" className="bg-lime/10 text-lime border-lime/20">
+                                    {referral.status}
+                                  </Badge>
+                                </div>
+                                <div className="text-right font-semibold">{referral.points.toLocaleString()}</div>
                               </div>
-                              <span className="font-medium">@{referral.username}</span>
-                            </div>
-                            <div className="text-sm text-muted-foreground">{referral.joinedAt}</div>
-                            <div>
-                              <Badge variant="outline" className="bg-lime/10 text-lime border-lime/20">
-                                {referral.status}
-                              </Badge>
-                            </div>
-                            <div className="text-right font-semibold">{referral.points.toLocaleString()}</div>
-                          </div>
-                        ))}
+                            ))}
                           </div>
                         </div>
                       </div>
