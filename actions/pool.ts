@@ -7,8 +7,8 @@ export async function getPoolList(userId: number) {
 
 export async function checkPoolExists(superTokenAddress: string, userId: number) {
   const response = await api.post("/pool/check", {
-    super_token_address: superTokenAddress,
-    user_id: userId
+    superTokenAddress: superTokenAddress,
+    userId: userId
   })
   return response.data.result
 }

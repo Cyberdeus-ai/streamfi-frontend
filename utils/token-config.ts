@@ -171,7 +171,7 @@ export const TOKEN_CONFIGS: NetworkTokens = {
     {
       symbol: "ETH",
       address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-      superTokenAddress: "0x4ac8bd1bd1ae8e6a794f523dc07e4e2d1dd7b2e0",
+      superTokenAddress: "0xC22BeA0Be9872d8B7B3933CEc70Ece4D53A900da",
       decimals: 18,
     },
     {
@@ -345,7 +345,7 @@ export const TOKEN_CONFIGS: NetworkTokens = {
     {
       symbol: "ETH",
       address: "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-      superTokenAddress: "0x4e68Ccd3E89f51C3074ca5072bbAC773960dFa36",
+      superTokenAddress: "0x46fd5cfB4c12D87acD3a13e92BAa53240C661D93",
       decimals: 18,
     },
     {

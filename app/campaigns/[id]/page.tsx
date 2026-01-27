@@ -43,6 +43,7 @@ export default function CampaignDetailPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [twitterReferer, setTwitterReferer] = useState<string>("")
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false)
+  const isCreator = user?.id === campaign.user.id
   const isAdmin = user?.account_type === "Admin"
 
   const monthlyPoolAmount = useMemo(() => {
@@ -50,6 +51,19 @@ export default function CampaignDetailPage() {
     return monthlyRate.toLocaleString(undefined, { maximumFractionDigits: 2, minimumFractionDigits: 0 })
   }, [campaign.pool?.flow_rate, campaign.pool?.flow_rate_unit])
 
+  useEffect(() => {
+    const campaignId = Number(params.id)
+    const contextCampaign = getCampaignFromContext(campaignId)
+
+    if (contextCampaign) {
+      setCampaign(contextCampaign)
+      setIsLoading(false)
+    } else {
+      setCampaign(mockCampaigns[0])
+      setIsLoading(false)
+    }
+  }, [params.id, getCampaignFromContext])
+  
   const handleEditCampaign = () => {
     router.push(`/campaigns/create?edit=${params.id}`)
   }
@@ -77,19 +91,6 @@ export default function CampaignDetailPage() {
       setIsLoading(false)
     }
   }
-
-  useEffect(() => {
-    const campaignId = Number(params.id)
-    const contextCampaign = getCampaignFromContext(campaignId)
-
-    if (contextCampaign) {
-      setCampaign(contextCampaign)
-      setIsLoading(false)
-    } else {
-      setCampaign(mockCampaigns[0])
-      setIsLoading(false)
-    }
-  }, [params.id, getCampaignFromContext])
 
   if (isLoading) {
     return (
@@ -152,7 +153,7 @@ export default function CampaignDetailPage() {
             </div>
             <div className="flex items-center justify-end px-4 sm:px-6 py-3 pl-16 lg:pl-4">
               <div className="flex items-center gap-3">
-                {isAdmin && (
+                {isCreator && (
                   <Button onClick={handleEditCampaign} variant="outline">
                     <Edit className="w-4 h-4 mr-2" />
                     <span className="hidden sm:inline">Edit Campaign</span>

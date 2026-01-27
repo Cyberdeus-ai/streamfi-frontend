@@ -31,6 +31,7 @@ export type Campaign = {
   description?: string
   logo?: string
   website?: string
+  web3_social?: string
   twitter?: string
   about?: string
   guidelines?: string[]

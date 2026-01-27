@@ -1,5 +1,5 @@
 import axios from "axios"
-import { setAuthToken, setApiInstance } from "./setAuthToken"
+import { setApiInstance } from "./setAuthToken"
 import { notifications } from "./toast"
 
 const api = axios.create({
@@ -7,8 +7,6 @@ const api = axios.create({
 })
 
 setApiInstance(api)
-
-let redirectTimeout: NodeJS.Timeout | null = null
 
 api.interceptors.request.use(
   (config) => {

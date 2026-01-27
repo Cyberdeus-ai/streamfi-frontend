@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { AuthGuard } from "@/components/auth-guard"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { ArrowLeft, Image as ImageIcon, X, Loader2, Plus, CheckCircle2 } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
 import Link from "next/link"
@@ -17,6 +18,30 @@ import type { Campaign } from "@/types"
 import { createCampaign, uploadImage, updateCampaign as updateCampaignAction } from "@/actions/campaigns"
 import { PoolSelector } from "@/components/campaigns/pool-selector"
 import { mockCampaigns } from "@/data/mock-data"
+import { FarcasterIcon } from "@/components/icons/farcaster-icon"
+import { LensIcon } from "@/components/icons/lens-icon"
+import { MindsIcon } from "@/components/icons/minds-icon"
+
+const web3Socials = [
+    {
+        name: "Farcaster",
+        value: "farcaster",
+        icon: <FarcasterIcon className="w-24 h-24 fill-[#855DCD]" />,
+        url: "https://farcaster.xyz",
+    },
+    {
+        name: "Lens Protocol",
+        value: "lens",
+        icon: <LensIcon className="w-24 h-24 fill-[#05B044]" />,
+        url: "https://lens.xyz",
+    },
+    {
+        name: "Minds",
+        value: "minds",
+        icon: <MindsIcon className="w-24 h-24 fill-[#FED12F]" />,
+        url: "https://minds.com",
+    }
+]
 
 function CreateCampaignContent({ }) {
     const router = useRouter()
@@ -118,7 +143,7 @@ function CreateCampaignContent({ }) {
 
     const handleSubmit = async () => {
         const newErrors: Record<string, string> = {}
-        
+
         if (!campaign.name?.trim()) {
             newErrors.name = "Campaign name is required"
         }
@@ -127,8 +152,8 @@ function CreateCampaignContent({ }) {
             newErrors.description = "Campaign description is required"
         }
 
-        if (!campaign.website?.trim()) {
-            newErrors.website = "Campaign website is required"
+        if (!campaign.web3_social?.trim()) {
+            newErrors.web3_social = "Campaign website is required"
         }
 
         if (!campaign.twitter?.trim()) {
@@ -316,13 +341,36 @@ function CreateCampaignContent({ }) {
 
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                                             <div>
-                                                <label className="text-sm font-medium mb-2 block">Website</label>
-                                                <Input
-                                                    value={campaign?.website || ""}
-                                                    onChange={(e) => onInputChanged({ target: { name: "website", value: e.target.value } } as React.ChangeEvent<HTMLInputElement>)}
-                                                    className="bg-secondary border-border"
-                                                    placeholder="https://example.com"
-                                                />
+                                                <label className="text-sm font-medium mb-2 block">Web3 Socials</label>
+                                                <Select
+                                                    value={campaign?.web3_social || ""}
+                                                    onValueChange={(value) => setCampaign((prev) => ({
+                                                        ...prev,
+                                                        web3_social: value,
+                                                        website: web3Socials.find((social) => social.value === value)?.url || ""
+                                                    }))}
+                                                >
+                                                    <SelectTrigger className="bg-background border-border">
+                                                        {campaign?.web3_social ? (
+                                                            <div className="flex items-center gap-2">
+                                                                <span className="w-4 h-4 flex items-center justify-center">{web3Socials.find((s) => s.value === campaign?.web3_social)?.icon}</span>
+                                                                <SelectValue>{web3Socials.find((s) => s.value === campaign?.web3_social)?.name}</SelectValue>
+                                                            </div>
+                                                        ) : (
+                                                            <SelectValue placeholder="Select a Web3 social" />
+                                                        )}
+                                                    </SelectTrigger>
+                                                    <SelectContent>
+                                                        {web3Socials.map((social) => (
+                                                            <SelectItem key={social.name} value={social.value}>
+                                                                <div className="flex items-center gap-2">
+                                                                    <span className="w-4 h-4 flex items-center justify-center">{social.icon}</span>
+                                                                    <span>{social.name}</span>
+                                                                </div>
+                                                            </SelectItem>
+                                                        ))}
+                                                    </SelectContent>
+                                                </Select>
                                             </div>
                                             <div>
                                                 <label className="text-sm font-medium mb-2 block">Twitter Handle</label>
